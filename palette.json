@@ -1,0 +1,19 @@
+{
+  "name": "churn-karar-destek",
+  "background": "#0F172A",
+  "surface": "#1E293B",
+  "text_primary": "#F1F5F9",
+  "text_secondary": "#94A3B8",
+  "primary": "#38BDF8",
+  "danger": "#FB7185",
+  "warning": "#F4A261",
+  "success": "#2A9D8F",
+  "border": "#334155",
+  "wcag_aa_contrast_checks": {
+    "text_primary/background": 16.3,
+    "text_primary/surface": 13.35,
+    "primary/background": 8.33,
+    "danger/background": 6.63,
+    "success/background": 5.37
+  }
+}

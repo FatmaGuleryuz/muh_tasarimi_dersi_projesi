@@ -1,0 +1,21 @@
+{
+  "tenure": 0.9834501129465889,
+  "MonthlyCharges": 0.6305280946860737,
+  "Contract": 0.5741353426414267,
+  "TotalCharges": 0.3492179648126474,
+  "OnlineSecurity": 0.22323138153417416,
+  "TechSupport": 0.19862506532964735,
+  "PaperlessBilling": 0.17957798105483885,
+  "PhoneService": 0.15424675537628152,
+  "InternetService": 0.1290413818037236,
+  "OnlineBackup": 0.11397898091846025,
+  "Dependents": 0.10679205060061127,
+  "PaymentMethod": 0.07574165957461983,
+  "DeviceProtection": 0.06850973628287743,
+  "MultipleLines": 0.06492794247035856,
+  "SeniorCitizen": 0.0590238841986909,
+  "Partner": 0.018233985384300988,
+  "gender": 0.014404546256837264,
+  "StreamingMovies": 0.008946997120911803,
+  "StreamingTV": 0.0036351060993981836
+}
