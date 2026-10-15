@@ -1,30 +1,36 @@
 {
   "models": {
     "logistic_regression": {
-      "roc_auc": 0.8396031930558785,
-      "precision": 0.5059422750424448,
-      "recall": 0.7967914438502673,
-      "f1": 0.6188992731048806
+      "roc_auc": 0.8456844661448243,
+      "precision": 0.5068493150684932,
+      "recall": 0.7914438502673797,
+      "f1": 0.6179540709812108
     },
     "random_forest": {
-      "roc_auc": 0.8224172673021778,
-      "precision": 0.5638051044083526,
-      "recall": 0.6497326203208557,
-      "f1": 0.6037267080745342
+      "roc_auc": 0.8438102250122711,
+      "precision": 0.5181347150259067,
+      "recall": 0.8021390374331551,
+      "f1": 0.6295907660020986
     },
     "xgboost": {
-      "roc_auc": 0.811933917176884,
-      "precision": 0.5623529411764706,
-      "recall": 0.6390374331550802,
-      "f1": 0.5982478097622027
+      "roc_auc": 0.8474760391640187,
+      "precision": 0.5227272727272727,
+      "recall": 0.7994652406417112,
+      "f1": 0.6321353065539113
     }
   },
-  "best_model": "logistic_regression",
+  "cv_roc_auc": {
+    "logistic_regression": 0.8484325212656371,
+    "random_forest": 0.8478870602659413,
+    "xgboost": 0.8493335799656274
+  },
+  "best_model": "xgboost",
   "target_roc_auc": 0.84,
-  "target_met": false,
+  "target_met": true,
   "dataset": {
     "rows": 7043,
     "churn_rate": 0.2653698707936959,
-    "missing_total_charges_filled": 11
+    "missing_total_charges_filled": 11,
+    "feature_count": 51
   }
 }
