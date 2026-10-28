@@ -27,20 +27,20 @@ TARGET_ROC_AUC = 0.84
 RANDOM_STATE = 42
 
 REASON_SOLUTIONS = {
-    "tenure": "Ilk aylara ozel karşilama / bağlilik programi",
-    "MonthlyCharges": "Kullanima uygun daha duşuk paket onerisi",
-    "TotalCharges": "Kullanima uygun daha duşuk paket onerisi",
-    "AvgMonthlySpend": "Kullanima uygun daha duşuk paket onerisi",
-    "NumAdditionalServices": "Belirli sure ucretsiz ek hizmet tanimlanmasi",
-    "Contract_Month-to-month": "Uzun donem sozlesmeye gecişte indirim",
-    "Contract_One year": "Iki yillik sozlesmeye gecişte ek indirim",
-    "TechSupport_No": "Belirli sure ucretsiz teknik destek tanimlanmasi",
-    "OnlineSecurity_No": "Belirli sure ucretsiz cevrim ici guvenlik hizmeti",
-    "PaymentMethod_Electronic check": "Otomatik odemeye geçişte avantaj",
-    "InternetService_Fiber optic": "Fiber hizmet kalitesi/fiyat gozden geçirme kampanyasi",
-    "SeniorCitizen": "Yaşli musterilere ozel destek hatti/paket",
+    "tenure": "İlk aylara özel karşılama / bağlılık programı",
+    "MonthlyCharges": "Kullanıma uygun daha düşük paket önerisi",
+    "TotalCharges": "Kullanıma uygun daha düşük paket önerisi",
+    "AvgMonthlySpend": "Kullanıma uygun daha düşük paket önerisi",
+    "NumAdditionalServices": "Belirli süre ücretsiz ek hizmet tanımlanması",
+    "Contract_Month-to-month": "Uzun dönem sözleşmeye geçişte indirim",
+    "Contract_One year": "İki yıllık sözleşmeye geçişte ek indirim",
+    "TechSupport_No": "Belirli süre ücretsiz teknik destek tanımlanması",
+    "OnlineSecurity_No": "Belirli süre ücretsiz çevrimiçi güvenlik hizmeti",
+    "PaymentMethod_Electronic check": "Otomatik ödemeye geçişte avantaj",
+    "InternetService_Fiber optic": "Fiber hizmet kalitesi/fiyat gözden geçirme kampanyası",
+    "SeniorCitizen": "Yaşlı müşterilere özel destek hattı/paket",
 }
-DEFAULT_SOLUTION = "Musteri temsilcisi tarafindan ozel teklif degerlendirilsin"
+DEFAULT_SOLUTION = "Müşteri temsilcisi tarafından özel teklif değerlendirilsin"
 
 
 def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
