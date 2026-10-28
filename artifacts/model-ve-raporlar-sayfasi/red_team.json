@@ -1,0 +1,63 @@
+{
+  "task": "model-ve-raporlar-sayfasi",
+  "reviewed_at": "2026-10-28T00:00:00Z",
+  "summary": "Implementasyon atdd.md'nin tüm AC'lerini (AC-1,2,3,4,5) karşılıyor, backend davranış sözleşmesi tablosunun 4 satırı da kodda doğru ayrılmış durumda (happy/empty/missing-file/network-error net üç farklı yol). Scope sıkı tutulmuş, CAVEMAN açısından minimal. Tek gerçek reliability açığı: metrics.json/shap_scores.json geçerli JSON ama beklenen anahtarları (best_model/dataset.rows vb.) içermezse 503'e değil ham 500/KeyError'a düşülüyor — bu atdd.md'nin AC-5 metnine (sadece 'yok ya da JSON parse hatası') harfiyen uyuyor ama 'bozuk' kelimesinin daha geniş okunması gerekebilirdi.",
+  "findings": [
+    {
+      "severity": "low",
+      "category": "reliability",
+      "file": "backend/app/main.py",
+      "issue": "model_report() sadece FileNotFoundError ve json.JSONDecodeError'ı yakalıyor (satır 135). metrics.json/shap_scores.json geçerli JSON ama beklenen anahtarları (best_model, dataset.rows, dataset.churn_rate, target_roc_auc, models.*) içermiyorsa KeyError fırlar ve FastAPI bunu yakalanmamış 500'e çevirir — AC-5'in beklediği 503 + açıklayıcı detail mesajı yerine jenerik/belirsiz bir hata döner.",
+      "better_approach": "except bloğuna (FileNotFoundError, json.JSONDecodeError, KeyError) eklenebilir veya metrics/shap sözlüğünden okuma bir yardımcı fonksiyonda toplanıp aynı 503 mesajına eşlenebilir.",
+      "reason": "atdd.md AC-5 'ya da bozuk' diyor; şema eksikliği de pratikte 'bozuk' sayılır. Not: Bu aynı zayıflık mevcut /api/summary'de de zaten var (pre-existing pattern), bu görevin kattığı yeni bir regresyon değil, ama yeni uç bunu miras aldığı için not ediyorum."
+    },
+    {
+      "severity": "low",
+      "category": "test-gap",
+      "file": "backend/tests/test_model_report.py",
+      "issue": "AC-5'in 'JSON parse hatası' (bozuk/malformed JSON içerik) dalı test edilmiyor; sadece 'dosya hiç yok' (tmp_path boş dizin) senaryosu test ediliyor.",
+      "better_approach": "tmp_path içine geçersiz JSON içerikli bir metrics.json yazıp aynı 503 davranışını doğrulayan dördüncü bir test eklenebilir.",
+      "reason": "plan.md'nin kendi tanımı (a/b/c, 3 test) zaten JSONDecodeError'ı kapsam dışı bırakmış, dolayısıyla bir ATDD ihlali değil ama except bloğundaki iki daldan biri hiç kanıtlanmamış kalıyor."
+    },
+    {
+      "severity": "low",
+      "category": "readability",
+      "file": "web/src/pages/ModelReports.tsx",
+      "issue": "tsc --noEmit ModelReports.tsx'te 2 hata veriyor — proje genelindeki önceden var olan lucide-react ikon tipi uyuşmazlığının tekrarı, yeni bir hata sınıfı değil.",
+      "better_approach": "Bu görevin kapsamı dışında bırakılması doğru karar; ileride proje genelinde @types/react sürümü lucide-react ile hizalanırsa 10 hata birden temizlenebilir.",
+      "reason": "Teknik borç birikmeye devam ediyor, tsc çıktısı giderek gürültülü hale gelip gerçek yeni hataları gizleyebilir."
+    }
+  ],
+  "strengths": [
+    "Davranış Sözleşmesi tablosunun satırları backend'de gerçekten ayrı kod yollarıyla ayrılmış: drivers boşsa 200+[], dosya/şema eksikse 503 — sessiz başarı veya boş/hata karışması riski yok.",
+    "drivers sıralaması backend'de sorted(reverse=True) ile üretiliyor, dosya sırasına güvenilmiyor.",
+    "_model_rows() refactor'ü gerçek kod tekrarını azaltıyor, davranış değişmeden — CAVEMAN'a uygun.",
+    "getJson() değişikliği 404 özel dalını koruyarak sadece detail-okuma ekliyor, regresyon riski düşük.",
+    "Scope tam atdd.md ile örtüşüyor, kapsam-dışı maddelere dokunulmamış."
+  ],
+  "risks": [
+    "Kabul edilen risk (threat-model, atdd.md'de kayıtlı): /api/* uçlarında auth/rate-limit yok — localhost-only akademik araç gerekçesiyle kabul edilmiş.",
+    "metrics.json/shap_scores.json şema-eksik senaryosu backend'de 500'e düşüyor — düşük olasılıklı ama akademik teslim öncesi train_model.py yarım çalıştırılırsa beklenmedik hata izi bırakabilir."
+  ],
+  "caveman_review": {
+    "complexity": "low",
+    "unnecessary_files": 0,
+    "unnecessary_helpers": 0,
+    "unnecessary_abstractions": 0
+  },
+  "scope_review": {
+    "matches_atdd": true,
+    "scope_expansion": false
+  },
+  "ready_to_commit": {
+    "atdd_satisfied": true,
+    "tests_passed": true,
+    "no_critical_findings": true,
+    "scope_respected": true,
+    "caveman_satisfied": true,
+    "security_acceptable": true,
+    "maintainability_acceptable": true,
+    "no_blocking_risks": true
+  },
+  "verdict": "approve"
+}

@@ -52,6 +52,13 @@ def load_customers() -> pd.DataFrame:
     return df
 
 
+def _model_rows(metrics: dict) -> list[dict]:
+    return [
+        {"key": k, "label": MODEL_LABELS.get(k, k), **{m: round(v[m], 6) for m in ("roc_auc", "precision", "recall", "f1")}}
+        for k, v in metrics["models"].items()
+    ]
+
+
 @app.get("/api/summary")
 def summary():
     df = load_customers()
@@ -61,10 +68,7 @@ def summary():
     high = df[df["risk"] == "high"]
 
     best = metrics["best_model"]
-    models = [
-        {"key": k, "label": MODEL_LABELS.get(k, k), **{m: round(v[m], 6) for m in ("roc_auc", "precision", "recall", "f1")}}
-        for k, v in metrics["models"].items()
-    ]
+    models = _model_rows(metrics)
 
     risk_distribution = []
     for level, label in (("high", "Yüksek risk"), ("mid", "Orta risk"), ("low", "Düşük risk")):
@@ -120,6 +124,34 @@ def summary():
         "by_contract": by_contract,
         "top_drivers": top_drivers,
         "top_customers": top_customers,
+    }
+
+
+@app.get("/api/model-report")
+def model_report():
+    try:
+        metrics = load_json("metrics.json")
+        shap = load_json("shap_scores.json")
+    except (FileNotFoundError, json.JSONDecodeError):
+        raise HTTPException(status_code=503, detail="Model çıktıları bulunamadı; train_model.py çalıştırın")
+
+    best = metrics["best_model"]
+    drivers = [
+        {"feature": k, "label": label_for(k), "score": round(v, 4)}
+        for k, v in sorted(shap.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+    return {
+        "models": _model_rows(metrics),
+        "best": best,
+        "best_label": MODEL_LABELS.get(best, best),
+        "target": metrics["target_roc_auc"],
+        "target_met": metrics["target_met"],
+        "dataset": {
+            "name": "IBM Telco Customer Churn",
+            "rows": metrics["dataset"]["rows"],
+            "churn_rate": metrics["dataset"]["churn_rate"],
+        },
+        "drivers": drivers,
     }
 
 

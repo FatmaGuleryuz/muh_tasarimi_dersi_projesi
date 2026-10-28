@@ -36,3 +36,14 @@ export interface CustomerDetail {
   action: string;
   overall_top_drivers: { feature: string; label: string; score: number }[];
 }
+
+// backend/app/main.py -> GET /api/model-report yanıtı
+export interface ModelReport {
+  models: ModelMetrics[];
+  best: string;
+  best_label: string;
+  target: number;
+  target_met: boolean;
+  dataset: { name: string; rows: number; churn_rate: number };
+  drivers: { feature: string; label: string; score: number }[];
+}
