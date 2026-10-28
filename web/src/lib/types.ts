@@ -17,3 +17,22 @@ export interface Summary {
   top_drivers: { feature: string; label: string; score: number }[];
   top_customers: TopCustomer[];
 }
+
+// backend/app/main.py -> GET /api/customers yanıtı
+export interface CustomerList { total: number; customers: TopCustomer[] }
+
+// backend/app/main.py -> GET /api/customers/{id} yanıtı
+export interface CustomerDetail {
+  customer_id: string;
+  probability: number;
+  actual_churn: boolean;
+  risk: RiskLevel;
+  contract: string;
+  tenure_months: number;
+  monthly_charges: number;
+  total_charges: number | null;
+  reason: string;
+  reason_feature: string;
+  action: string;
+  overall_top_drivers: { feature: string; label: string; score: number }[];
+}

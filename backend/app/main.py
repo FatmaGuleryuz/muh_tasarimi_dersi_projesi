@@ -7,9 +7,10 @@
 import json
 from functools import lru_cache
 from pathlib import Path
+from typing import Optional
 
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
@@ -42,7 +43,9 @@ def load_json(name: str) -> dict:
 def load_customers() -> pd.DataFrame:
     """test_customers.csv + ham veriden sözleşme / süre / aylık ücret."""
     df = pd.read_csv(ROOT / "test_customers.csv")
-    raw = pd.read_csv(ROOT / "data" / "telco_churn_raw.csv")[["customerID", "Contract", "tenure", "MonthlyCharges"]]
+    raw = pd.read_csv(ROOT / "data" / "telco_churn_raw.csv")[
+        ["customerID", "Contract", "tenure", "MonthlyCharges", "TotalCharges"]
+    ]
     df = df.merge(raw, on="customerID", how="left")
     df["risk"] = df["churn_probability"].map(risk_level)
     df["reason_label"] = df["top_reason"].map(label_for)
@@ -117,6 +120,66 @@ def summary():
         "by_contract": by_contract,
         "top_drivers": top_drivers,
         "top_customers": top_customers,
+    }
+
+
+def _customer_row(r) -> dict:
+    return {
+        "customer_id": r.customerID,
+        "probability": float(r.churn_probability),
+        "risk": r.risk,
+        "contract": CONTRACTS.get(r.Contract, r.Contract),
+        "reason": r.reason_label,
+        "action": r.suggested_action,
+    }
+
+
+@app.get("/api/customers")
+def list_customers(risk: Optional[str] = None, q: Optional[str] = None, limit: int = 200):
+    """Test setindeki müşteriler — risk seviyesine ve/veya müşteri ID'sine göre filtrelenebilir."""
+    df = load_customers()
+    if risk is not None:
+        if risk not in ("high", "mid", "low"):
+            raise HTTPException(status_code=400, detail="risk 'high', 'mid' veya 'low' olmalı")
+        df = df[df["risk"] == risk]
+    if q:
+        df = df[df["customerID"].str.contains(q, case=False, na=False)]
+    df = df.sort_values("churn_probability", ascending=False).head(max(1, min(limit, 1000)))
+    return {"total": len(df), "customers": [_customer_row(r) for r in df.itertuples()]}
+
+
+@app.get("/api/customers/{customer_id}")
+def get_customer(customer_id: str):
+    """Tek bir müşterinin kayıp olasılığı, sözleşme/kullanım bilgileri ve önerilen aksiyonu.
+
+    Not: SHAP katkı dökümü şu an sadece agregat (tüm test seti) düzeyinde
+    hesaplanıyor (shap_scores.json) — müşteri bazlı tam SHAP vektörü
+    saklanmıyor, bu yüzden burada uydurma bir kırılım döndürülmüyor;
+    `top_reason` (modelin bu müşteri için bulduğu gerçek en yüksek katkılı
+    değişken) ve genel neden sıralaması birlikte sunuluyor.
+    """
+    df = load_customers()
+    match = df[df["customerID"] == customer_id]
+    if match.empty:
+        raise HTTPException(status_code=404, detail=f"Müşteri bulunamadı: {customer_id}")
+    r = match.iloc[0]
+    shap = load_json("shap_scores.json")
+    return {
+        "customer_id": r.customerID,
+        "probability": float(r.churn_probability),
+        "actual_churn": bool(r.actual_churn),
+        "risk": r.risk,
+        "contract": CONTRACTS.get(r.Contract, r.Contract),
+        "tenure_months": int(r.tenure),
+        "monthly_charges": float(r.MonthlyCharges),
+        "total_charges": float(r.TotalCharges) if pd.notna(r.TotalCharges) else None,
+        "reason": r.reason_label,
+        "reason_feature": r.top_reason,
+        "action": r.suggested_action,
+        "overall_top_drivers": [
+            {"feature": k, "label": label_for(k), "score": round(v, 4)}
+            for k, v in list(shap.items())[:8]
+        ],
     }
 
 
