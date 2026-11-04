@@ -6,6 +6,7 @@
 """
 import json
 import logging
+import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal, Optional
@@ -28,6 +29,33 @@ MODEL_LABELS = {
     "xgboost": "XGBoost",
 }
 
+# dir None: proje koku (cagri aninda cozulur). raw None: sozlesme/sure/ucret verisi yok.
+DATASETS = {
+    "telco": {"dir": None, "name": "IBM Telco Customer Churn", "raw": "data/telco_churn_raw.csv"},
+    "openml_churn": {"dir": ROOT / "outputs" / "openml_churn", "name": "OpenML Churn", "raw": None},
+}
+_DATASET_NAME = os.environ.get("DATASET", "telco")
+if _DATASET_NAME not in DATASETS:
+    raise ValueError(f"Bilinmeyen DATASET: {_DATASET_NAME}. Geçerli: {', '.join(DATASETS)}")
+ACTIVE = DATASETS[_DATASET_NAME]
+
+
+def _data_dir() -> Path:
+    return ROOT if ACTIVE["dir"] is None else ACTIVE["dir"]
+
+
+def _contract(value):
+    """Sözleşme etiketi; veri yoksa (NaN/None) None."""
+    if pd.isna(value):
+        return None
+    return CONTRACTS.get(value, value)
+
+
+def _opt(value, conv):
+    """Değer NaN/None ise None, değilse conv(value)."""
+    return None if pd.isna(value) else conv(value)
+
+
 app = FastAPI(title="Yetkin360 API", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_methods=["*"], allow_headers=["*"])
 
@@ -38,18 +66,23 @@ def risk_level(p: float) -> str:
 
 @lru_cache
 def load_json(name: str) -> dict:
-    with open(ROOT / name, encoding="utf-8") as f:
+    with open(_data_dir() / name, encoding="utf-8") as f:
         return json.load(f)
 
 
 @lru_cache
 def load_customers() -> pd.DataFrame:
-    """test_customers.csv + ham veriden sözleşme / süre / aylık ücret."""
-    df = pd.read_csv(ROOT / "test_customers.csv")
-    raw = pd.read_csv(ROOT / "data" / "telco_churn_raw.csv")[
-        ["customerID", "Contract", "tenure", "MonthlyCharges", "TotalCharges"]
-    ]
-    df = df.merge(raw, on="customerID", how="left")
+    """test_customers.csv + (varsa) ham veriden sözleşme / süre / aylık ücret."""
+    df = pd.read_csv(_data_dir() / "test_customers.csv")
+    if ACTIVE["raw"] is None:
+        df["Contract"] = None
+        for col in ("tenure", "MonthlyCharges", "TotalCharges"):
+            df[col] = float("nan")
+    else:
+        raw = pd.read_csv(_data_dir() / ACTIVE["raw"])[
+            ["customerID", "Contract", "tenure", "MonthlyCharges", "TotalCharges"]
+        ]
+        df = df.merge(raw, on="customerID", how="left")
     df["risk"] = df["churn_probability"].map(risk_level)
     df["reason_label"] = df["top_reason"].map(label_for)
     return df
@@ -64,9 +97,9 @@ def _model_rows(metrics: dict) -> list[dict]:
 
 @app.get("/api/summary")
 def summary():
-    df = load_customers()
-    metrics = load_json("metrics.json")
-    shap = load_json("shap_scores.json")
+    df = _load(load_customers)
+    metrics = _load(load_json, "metrics.json")
+    shap = _load(load_json, "shap_scores.json")
     total = len(df)
     high = df[df["risk"] == "high"]
 
@@ -99,7 +132,7 @@ def summary():
             "customer_id": r.customerID,
             "probability": float(r.churn_probability),
             "risk": r.risk,
-            "contract": CONTRACTS.get(r.Contract, r.Contract),
+            "contract": _contract(r.Contract),
             "reason": r.reason_label,
             "action": r.suggested_action,
         }
@@ -107,7 +140,7 @@ def summary():
     ]
 
     return {
-        "dataset": {"name": "IBM Telco Customer Churn", "test_customers": total, "total_rows": metrics["dataset"]["rows"]},
+        "dataset": {"name": ACTIVE["name"], "test_customers": total, "total_rows": metrics["dataset"]["rows"]},
         "thresholds": {"high": HIGH_THRESHOLD, "mid": MID_THRESHOLD},
         "model": {
             "best": best, "best_label": MODEL_LABELS.get(best, best),
@@ -150,7 +183,7 @@ def model_report():
         "target": metrics["target_roc_auc"],
         "target_met": metrics["target_met"],
         "dataset": {
-            "name": "IBM Telco Customer Churn",
+            "name": ACTIVE["name"],
             "rows": metrics["dataset"]["rows"],
             "churn_rate": metrics["dataset"]["churn_rate"],
         },
@@ -163,7 +196,7 @@ def _customer_row(r) -> dict:
         "customer_id": r.customerID,
         "probability": float(r.churn_probability),
         "risk": r.risk,
-        "contract": CONTRACTS.get(r.Contract, r.Contract),
+        "contract": _contract(r.Contract),
         "reason": r.reason_label,
         "action": r.suggested_action,
     }
@@ -172,7 +205,7 @@ def _customer_row(r) -> dict:
 @app.get("/api/customers")
 def list_customers(risk: Optional[str] = None, q: Optional[str] = None, limit: int = 200):
     """Test setindeki müşteriler — risk seviyesine ve/veya müşteri ID'sine göre filtrelenebilir."""
-    df = load_customers()
+    df = _load(load_customers)
     if risk is not None:
         if risk not in ("high", "mid", "low"):
             raise HTTPException(status_code=400, detail="risk 'high', 'mid' veya 'low' olmalı")
@@ -193,21 +226,21 @@ def get_customer(customer_id: str):
     `top_reason` (modelin bu müşteri için bulduğu gerçek en yüksek katkılı
     değişken) ve genel neden sıralaması birlikte sunuluyor.
     """
-    df = load_customers()
+    df = _load(load_customers)
     match = df[df["customerID"] == customer_id]
     if match.empty:
         raise HTTPException(status_code=404, detail=f"Müşteri bulunamadı: {customer_id}")
     r = match.iloc[0]
-    shap = load_json("shap_scores.json")
+    shap = _load(load_json, "shap_scores.json")
     return {
         "customer_id": r.customerID,
         "probability": float(r.churn_probability),
         "actual_churn": bool(r.actual_churn),
         "risk": r.risk,
-        "contract": CONTRACTS.get(r.Contract, r.Contract),
-        "tenure_months": int(r.tenure),
-        "monthly_charges": float(r.MonthlyCharges),
-        "total_charges": float(r.TotalCharges) if pd.notna(r.TotalCharges) else None,
+        "contract": _contract(r.Contract),
+        "tenure_months": _opt(r.tenure, int),
+        "monthly_charges": _opt(r.MonthlyCharges, float),
+        "total_charges": _opt(r.TotalCharges, float),
         "reason": r.reason_label,
         "reason_feature": r.top_reason,
         "action": r.suggested_action,
@@ -281,10 +314,10 @@ def postmortem_detail(customer_id: str):
         "probability": float(r.churn_probability),
         "risk": r.risk,
         "outcome": OUTCOME_BY_RISK[r.risk],
-        "contract": CONTRACTS.get(r.Contract, r.Contract),
-        "tenure_months": int(r.tenure),
-        "monthly_charges": float(r.MonthlyCharges),
-        "total_charges": float(r.TotalCharges) if pd.notna(r.TotalCharges) else None,
+        "contract": _contract(r.Contract),
+        "tenure_months": _opt(r.tenure, int),
+        "monthly_charges": _opt(r.MonthlyCharges, float),
+        "total_charges": _opt(r.TotalCharges, float),
         "reason": r.reason_label,
         "reason_feature": r.top_reason,
         "top_reason_global_rank": keys.index(r.top_reason) + 1 if r.top_reason in keys else None,

@@ -26,7 +26,7 @@ export default function Overview() {
 
   return (
     <>
-      <PageHeader title="Genel Bakış" badge={data ? `Veri seti: IBM Telco · ${num(data.dataset.test_customers)} test müşterisi` : undefined}>
+      <PageHeader title="Genel Bakış" badge={data ? `Veri seti: ${data.dataset.name} · ${num(data.dataset.test_customers)} test müşterisi` : undefined}>
         <Button variant="secondary" icon={RefreshCw} onClick={load} title="Verileri yeniden yükle">Yenile</Button>
         <Button icon={Download} onClick={exportCsv} title="Yüksek riskli müşterileri CSV olarak indir">Dışa Aktar</Button>
       </PageHeader>
@@ -97,21 +97,25 @@ export function OverviewView({ data, onNavigate }: { data: Summary; onNavigate: 
         </Card>
 
         <Card title="Sözleşme tipine göre churn" subtitle="Modelin ortalama kayıp olasılığı ve test setindeki gerçek ayrılma oranı">
-          <ul className="flex flex-col gap-5">
-            {data.by_contract.map((c) => (
-              <li key={c.contract}>
-                <div className="mb-1.5 flex items-baseline justify-between text-sm">
-                  <span className="font-semibold">{c.label}</span>
-                  <span className="num text-ink-2">
-                    <b className="text-ink">{pct(c.avg_probability)}</b> tahmin · {pct(c.actual_rate)} gerçek · {num(c.count)} müşteri
-                  </span>
-                </div>
-                <div className="h-2.5 w-full rounded-full bg-canvas">
-                  <div className="h-full rounded-full bg-forest" style={{ width: `${c.avg_probability * 100}%` }} />
-                </div>
-              </li>
-            ))}
-          </ul>
+          {data.by_contract.length === 0 ? (
+            <p className="text-sm text-ink-2">Bu veri setinde sözleşme bilgisi yok</p>
+          ) : (
+            <ul className="flex flex-col gap-5">
+              {data.by_contract.map((c) => (
+                <li key={c.contract}>
+                  <div className="mb-1.5 flex items-baseline justify-between text-sm">
+                    <span className="font-semibold">{c.label}</span>
+                    <span className="num text-ink-2">
+                      <b className="text-ink">{pct(c.avg_probability)}</b> tahmin · {pct(c.actual_rate)} gerçek · {num(c.count)} müşteri
+                    </span>
+                  </div>
+                  <div className="h-2.5 w-full rounded-full bg-canvas">
+                    <div className="h-full rounded-full bg-forest" style={{ width: `${c.avg_probability * 100}%` }} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </Card>
       </div>
 
@@ -158,7 +162,7 @@ export function OverviewView({ data, onNavigate }: { data: Summary; onNavigate: 
                   <tr key={c.customer_id} className="hover:bg-row-hover">
                     <td className="px-6 py-3.5 font-mono text-xs font-semibold">{c.customer_id}</td>
                     <td className="px-6 py-3.5 text-xs">
-                      <span className="rounded border border-line bg-canvas px-2 py-1 font-semibold">{c.contract}</span>
+                      <span className="rounded border border-line bg-canvas px-2 py-1 font-semibold">{c.contract ?? "—"}</span>
                     </td>
                     <td className="px-6 py-3.5"><RiskBadge level={c.risk} probability={c.probability} /></td>
                     <td className="px-6 py-3.5 text-xs">{c.reason}</td>

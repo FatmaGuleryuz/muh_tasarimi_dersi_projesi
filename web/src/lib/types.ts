@@ -2,7 +2,8 @@
 export type RiskLevel = "high" | "mid" | "low";
 
 export interface ModelMetrics { key: string; label: string; roc_auc: number; precision: number; recall: number; f1: number }
-export interface TopCustomer { customer_id: string; probability: number; risk: RiskLevel; contract: string; reason: string; action: string }
+// contract: ikinci veri setinde (openml_churn) null olabilir
+export interface TopCustomer { customer_id: string; probability: number; risk: RiskLevel; contract: string | null; reason: string; action: string }
 
 export interface Summary {
   dataset: { name: string; test_customers: number; total_rows: number };
@@ -27,9 +28,10 @@ export interface CustomerDetail {
   probability: number;
   actual_churn: boolean;
   risk: RiskLevel;
-  contract: string;
-  tenure_months: number;
-  monthly_charges: number;
+  // contract/tenure_months/monthly_charges/total_charges: openml_churn'de null (Telco'ya özgü alanlar)
+  contract: string | null;
+  tenure_months: number | null;
+  monthly_charges: number | null;
   total_charges: number | null;
   reason: string;
   reason_feature: string;
@@ -47,7 +49,7 @@ export interface PostmortemSummary {
 
 export interface PostmortemItem {
   customer_id: string; probability: number; risk: RiskLevel; outcome: Outcome;
-  contract: string; reason: string; reason_feature: string; action: string;
+  contract: string | null; reason: string; reason_feature: string; action: string;
 }
 
 export interface PostmortemList { summary: PostmortemSummary; total: number; items: PostmortemItem[] }
@@ -55,7 +57,7 @@ export interface PostmortemList { summary: PostmortemSummary; total: number; ite
 // backend/app/main.py -> GET /api/postmortem/{id} yanıtı
 export interface PostmortemDetail {
   customer_id: string; actual_churn: boolean; probability: number; risk: RiskLevel; outcome: Outcome;
-  contract: string; tenure_months: number; monthly_charges: number; total_charges: number | null;
+  contract: string | null; tenure_months: number | null; monthly_charges: number | null; total_charges: number | null;
   reason: string; reason_feature: string; top_reason_global_rank: number | null;
   action: string; action_applied: boolean | null; action_applied_note: string;
 }

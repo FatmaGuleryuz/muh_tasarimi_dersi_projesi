@@ -63,9 +63,9 @@ function DetailView({ data }: { data: CustomerDetailType }) {
           <RiskBadge level={data.risk} probability={data.probability} />
         </div>
         <div className="mt-6 grid grid-cols-2 gap-5 text-sm sm:grid-cols-4">
-          <Field label="Sözleşme" value={data.contract} />
-          <Field label="Müşteri olma süresi" value={`${num(data.tenure_months)} ay`} />
-          <Field label="Aylık ücret" value={`₺${dec(data.monthly_charges, 2)}`} />
+          <Field label="Sözleşme" value={data.contract ?? "—"} />
+          <Field label="Müşteri olma süresi" value={data.tenure_months !== null ? `${num(data.tenure_months)} ay` : "—"} />
+          <Field label="Aylık ücret" value={data.monthly_charges !== null ? `₺${dec(data.monthly_charges, 2)}` : "—"} />
           <Field label="Toplam ücret" value={data.total_charges !== null ? `₺${dec(data.total_charges, 2)}` : "—"} />
         </div>
         {data.actual_churn && (

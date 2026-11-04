@@ -101,7 +101,7 @@ export default function CustomerRisk() {
                   <tr key={c.customer_id} className="hover:bg-row-hover">
                     <td className="px-6 py-3.5 font-mono text-xs font-semibold">{c.customer_id}</td>
                     <td className="px-6 py-3.5 text-xs">
-                      <span className="rounded border border-line bg-canvas px-2 py-1 font-semibold">{c.contract}</span>
+                      <span className="rounded border border-line bg-canvas px-2 py-1 font-semibold">{c.contract ?? "—"}</span>
                     </td>
                     <td className="px-6 py-3.5"><RiskBadge level={c.risk} probability={c.probability} /></td>
                     <td className="px-6 py-3.5 text-xs">{c.reason}</td>

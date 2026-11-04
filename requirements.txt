@@ -6,3 +6,4 @@ shap
 streamlit
 matplotlib
 joblib
+scipy

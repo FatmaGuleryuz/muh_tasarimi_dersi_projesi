@@ -1,0 +1,31 @@
+{
+  "task": "ikinci-churn-veri-seti",
+  "reviewed_at": "2026-11-04T00:00:00+03:00",
+  "reviewer_note": "Codex başarısız (codex CLI kurulu değil), yedek kullanıldı",
+  "summary": "İki profilli eğitim, DATASET seçimi, atomik .tmp yazımı ve null-safe frontend doğrulandı; 63/63 test geçiyor. Telco yolu kod incelemesiyle eski davranışla birebir aynı bulundu. İki medium bulgu: reload tabanlı AC-9 testi ve global TARGET_ROC_AUC.",
+  "findings": [
+    {"severity": "medium", "category": "reliability", "file": "backend/tests/test_dataset_contract.py", "issue": "AC-9 testi backend.app.main modülünü importlib.reload ile süreç genelinde değiştiriyor; diğer test dosyaları eski app nesnesini tutuyor. Testler şu an yalnızca alfabetik çalışma sırası sayesinde geçiyor.", "better_approach": "DATASET doğrulamasını saf bir fonksiyona (ör. resolve_active(value)) çıkar; main.py bunu yükleme sırasında çağırır, test ise fonksiyonu doğrudan reload olmadan dener.", "reason": "Test izolasyonu; pytest-randomly eklendiğinde ya da dosya adları değiştiğinde testler kırılabilir.", "source": "obss-red-team"},
+    {"severity": "medium", "category": "correctness", "file": "src/train_model.py", "issue": "TARGET_ROC_AUC global 0.84; openml_churn için atdd eşiği 0.80. metrics.json target_met değeri ve UI rozeti bu tutarsızlığı yansıtıyor.", "better_approach": "Eşiği profile taşı (telco 0.84, openml_churn 0.80).", "reason": "Veri setine özgü her değer profil sözlüğünde olmalı (atdd Tanımlar). Şu an etkisiz (0.9288).", "source": "obss-red-team"},
+    {"severity": "low", "category": "scope", "file": "src/train_model.py", "issue": "shap 3 boyutlu dizi düzeltmesi atdd kapsamında yok (code_diff.md'de belgelendi).", "better_approach": "atdd/plan'a not düş.", "reason": "Şeffaflık.", "source": "obss-red-team"},
+    {"severity": "low", "category": "maintainability", "file": "backend/app/main.py", "issue": "model-report çıktı yokken diğer uçlardan farklı bir 503 mesajı veriyor.", "better_approach": "model-report'u da _load ile sar.", "reason": "Tek ve tutarlı bir hata sözleşmesi; mevcut testlerde bu mesaj sabitlenmiş durumda.", "source": "obss-red-team"},
+    {"severity": "low", "category": "maintainability", "file": "outputs/openml_churn/model.joblib", "issue": "5.2 MB ikili dosya commit'e girecek.", "better_approach": "Git LFS kullanmak ya da artifact'ı commit dışında tutmak.", "reason": "Repo boyutu (R2, kabul edilmiş risk).", "source": "obss-red-team"},
+    {"severity": "low", "category": "readability", "file": "src/train_model.py", "issue": "state sayısal kod olduğundan etiketler 'Eyalet: 12' gibi görünüyor.", "better_approach": "Bilinen veri sınırlaması (R4); sunumda belirtilsin.", "reason": "Jüri için kafa karıştırıcı olabilir.", "source": "obss-red-team"}
+  ],
+  "strengths": [
+    "Telco yolu eski davranışla birebir aynı (git diff ile doğrulandı).",
+    "Atomik .tmp yazımı doğru; yarıda kesilen eğitim önceki çıktıları koruyor.",
+    "ACTIVE['dir']=None, mevcut ROOT monkeypatch testlerini bozmadan çalışmaya devam ettiriyor.",
+    "DATASET beyaz listeyle sınırlı; yeni HTTP ucu eklenmedi.",
+    "Frontend null kontrolleri types.ts ile tutarlı."
+  ],
+  "risks": [
+    "Reload tabanlı test, test çalışma sırasına bağımlı.",
+    "Global hedef eşiği ileride yanıltıcı bir UI rozetine yol açabilir.",
+    "5.2 MB model dosyası repoda kalacak.",
+    "model-report'un farklı 503 mesajı AC-10 testi kapsamında değil."
+  ],
+  "caveman_review": {"complexity": "medium", "unnecessary_files": 0, "unnecessary_helpers": 0, "unnecessary_abstractions": 0},
+  "scope_review": {"matches_atdd": true, "scope_expansion": true},
+  "ready_to_commit": {"atdd_satisfied": true, "tests_passed": true, "no_critical_findings": true, "scope_respected": true, "caveman_satisfied": true, "security_acceptable": true, "maintainability_acceptable": true, "no_blocking_risks": true},
+  "verdict": "approve-with-changes"
+}
