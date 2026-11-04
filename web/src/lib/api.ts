@@ -1,4 +1,4 @@
-import type { CustomerDetail, CustomerList, ModelReport, RiskLevel, Summary } from "./types";
+import type { CustomerDetail, CustomerList, ModelReport, Outcome, PostmortemDetail, PostmortemList, RiskLevel, Summary } from "./types";
 
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
@@ -29,5 +29,14 @@ export function fetchCustomers(opts: { risk?: RiskLevel | ""; q?: string } = {})
 }
 
 export const fetchCustomer = (id: string) => getJson<CustomerDetail>(`/api/customers/${encodeURIComponent(id)}`);
+
+export function fetchPostmortem(opts: { outcome?: Outcome | "" } = {}): Promise<PostmortemList> {
+  const params = new URLSearchParams();
+  if (opts.outcome) params.set("outcome", opts.outcome);
+  const qs = params.toString();
+  return getJson<PostmortemList>(`/api/postmortem${qs ? `?${qs}` : ""}`);
+}
+
+export const fetchPostmortemDetail = (id: string) => getJson<PostmortemDetail>(`/api/postmortem/${encodeURIComponent(id)}`);
 
 export const EXPORT_HIGH_RISK_URL = "/api/export/high-risk.csv";

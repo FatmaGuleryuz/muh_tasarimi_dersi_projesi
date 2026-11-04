@@ -1,9 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { BarChart3, ClipboardList, LayoutDashboard, Play, TrendingDown, Users } from "lucide-react";
+import { BarChart3, ClipboardList, History, LayoutDashboard, Play, TrendingDown, Users } from "lucide-react";
 
 const items = [
   { to: "/", label: "Genel Bakış", icon: LayoutDashboard, end: true },
   { to: "/musteri-riski", label: "Müşteri Riski", icon: Users },
+  { to: "/kayip-analizi", label: "Kayıp Analizi", icon: History },
   { to: "/kayip-tahmini", label: "Kayıp Tahmini", icon: TrendingDown },
   { to: "/mudahale-planlari", label: "Müdahale Planları", icon: ClipboardList },
   { to: "/model-ve-raporlar", label: "Model ve Raporlar", icon: BarChart3 },

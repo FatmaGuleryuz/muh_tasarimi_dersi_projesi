@@ -5,9 +5,16 @@ import Card from "../components/Card";
 import PageHeader from "../components/PageHeader";
 import Button from "../components/Button";
 import RiskBadge from "../components/RiskBadge";
-import { fetchCustomer } from "../lib/api";
+import OutcomeBadge from "../components/OutcomeBadge";
+import { fetchCustomer, fetchPostmortemDetail } from "../lib/api";
 import { dec, num, pct } from "../lib/format";
-import type { CustomerDetail as CustomerDetailType } from "../lib/types";
+import type { CustomerDetail as CustomerDetailType, Outcome, PostmortemDetail } from "../lib/types";
+
+const OUTCOME_TEXT: Record<Outcome, string> = {
+  caught: "Model bu müşteriyi yüksek riskte görmüştü",
+  partial: "Model bu müşteriyi orta riskte görmüştü",
+  missed: "Model bu müşteriyi düşük riskte gördü — kaçırıldı",
+};
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -68,6 +75,8 @@ function DetailView({ data }: { data: CustomerDetailType }) {
         )}
       </Card>
 
+      {data.actual_churn && <PostmortemSection id={data.customer_id} />}
+
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card title="Ana neden" subtitle="Model için bu müşteride en yüksek katkılı değişken">
           <p className="text-lg font-semibold text-ink">{data.reason}</p>
@@ -100,6 +109,51 @@ function DetailView({ data }: { data: CustomerDetailType }) {
         </ul>
       </Card>
     </>
+  );
+}
+
+/** Yalnızca actual_churn === true iken mount edilir; postmortem isteği bu durumda atılır. */
+function PostmortemSection({ id }: { id: string }) {
+  const [data, setData] = useState<PostmortemDetail | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchPostmortemDetail(id)
+      .then((r) => {
+        if (active) setData(r);
+      })
+      .catch((e: Error) => {
+        if (active) setError(e.message);
+      });
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  return (
+    <Card title="Postmortem" subtitle="Kayıp sonrası geriye dönük değerlendirme: model bu müşteriyi önceden görmüş müydü?">
+      {error && <p className="text-sm text-brick">Postmortem verisi alınamadı: {error}</p>}
+      {!error && !data && <p className="text-sm text-ink-2">Yükleniyor…</p>}
+      {data && (
+        <>
+          <div className="flex flex-wrap items-center gap-3">
+            <OutcomeBadge outcome={data.outcome} />
+            <p className="text-sm font-semibold text-ink">{OUTCOME_TEXT[data.outcome]}</p>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-5 text-sm sm:grid-cols-2">
+            <div>
+              <Field label="Birincil neden" value={data.reason} />
+              <p className="mt-1 text-xs text-ink-2">
+                {data.top_reason_global_rank === null ? "sıralama bilgisi yok" : `Genel sıralamada ${data.top_reason_global_rank}.`}
+              </p>
+            </div>
+            <Field label="Önerilen aksiyon" value={data.action} />
+          </div>
+          <p className="mt-5 text-xs font-semibold text-ink-2">Aksiyon uygulandı mı: Veri yok</p>
+        </>
+      )}
+    </Card>
   );
 }
 

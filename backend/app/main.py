@@ -5,16 +5,19 @@
     uvicorn backend.app.main:app --reload --port 8000
 """
 import json
+import logging
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
 from .labels import CONTRACTS, label_for
+
+logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[2]  # repo kökü
 HIGH_THRESHOLD = 0.70  # >= yüksek risk
@@ -212,6 +215,82 @@ def get_customer(customer_id: str):
             {"feature": k, "label": label_for(k), "score": round(v, 4)}
             for k, v in list(shap.items())[:8]
         ],
+    }
+
+
+OUTCOME_BY_RISK = {"high": "caught", "mid": "partial", "low": "missed"}
+
+
+def _load(loader, *args):
+    """Veri yükleme çağrısını sarar; her istisnada loglayıp 503 döner (HTTPException yutulmaz)."""
+    try:
+        return loader(*args)
+    except Exception:
+        logger.exception("Postmortem veri kaynağı okunamadı")
+        raise HTTPException(status_code=503, detail="Veri kaynağı okunamadı")
+
+
+@app.get("/api/postmortem")
+def postmortem_list(outcome: Optional[Literal["caught", "partial", "missed"]] = None,
+                    limit: int = Query(1000, ge=1, le=1000)):
+    """Kaybedilmiş müşteriler (actual_churn==1): modelin önceden yakaladığı, kısmen yakaladığı ya da kaçırdığı."""
+    df = _load(load_customers)
+    lost = df[df["actual_churn"] == 1]
+    lost_total = len(lost)
+    caught = int((lost["risk"] == "high").sum())
+    partial = int((lost["risk"] == "mid").sum())
+    missed = int((lost["risk"] == "low").sum())
+    high = df[df["risk"] == "high"]
+
+    items = lost if outcome is None else lost[lost["risk"].map(OUTCOME_BY_RISK) == outcome]
+    rows = [
+        {**_customer_row(r), "outcome": OUTCOME_BY_RISK[r.risk], "reason_feature": r.top_reason}
+        for r in items.sort_values("churn_probability").head(limit).itertuples()
+    ]
+    return {
+        "summary": {
+            "lost_total": lost_total,
+            "caught": caught,
+            "partial": partial,
+            "missed": missed,
+            "catch_rate": (caught + partial) / lost_total if lost_total else 0.0,
+            "strict_catch_rate": caught / lost_total if lost_total else 0.0,
+            "false_alarm_count": int((high["actual_churn"] == 0).sum()),
+            "precision_high": float((high["actual_churn"] == 1).mean()) if len(high) else 0.0,
+        },
+        "total": len(rows),
+        "items": rows,
+    }
+
+
+@app.get("/api/postmortem/{customer_id}")
+def postmortem_detail(customer_id: str):
+    """Kaybedilmiş tek müşterinin geriye dönük model değerlendirmesi."""
+    df = _load(load_customers)
+    match = df[df["customerID"] == customer_id]
+    if match.empty:
+        raise HTTPException(status_code=404, detail=f"Müşteri bulunamadı: {customer_id}")
+    r = match.iloc[0]
+    if not r.actual_churn:
+        raise HTTPException(status_code=409, detail=f"Müşteri kaybedilmemiş: {customer_id}")
+
+    keys = list(_load(load_json, "shap_scores.json").keys())
+    return {
+        "customer_id": r.customerID,
+        "actual_churn": True,
+        "probability": float(r.churn_probability),
+        "risk": r.risk,
+        "outcome": OUTCOME_BY_RISK[r.risk],
+        "contract": CONTRACTS.get(r.Contract, r.Contract),
+        "tenure_months": int(r.tenure),
+        "monthly_charges": float(r.MonthlyCharges),
+        "total_charges": float(r.TotalCharges) if pd.notna(r.TotalCharges) else None,
+        "reason": r.reason_label,
+        "reason_feature": r.top_reason,
+        "top_reason_global_rank": keys.index(r.top_reason) + 1 if r.top_reason in keys else None,
+        "action": r.suggested_action,
+        "action_applied": None,
+        "action_applied_note": "Veri yok",
     }
 
 

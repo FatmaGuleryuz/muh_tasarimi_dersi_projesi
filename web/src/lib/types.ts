@@ -37,6 +37,29 @@ export interface CustomerDetail {
   overall_top_drivers: { feature: string; label: string; score: number }[];
 }
 
+// backend/app/main.py -> GET /api/postmortem yanıtı (kayıp müşteri postmortem)
+export type Outcome = "caught" | "partial" | "missed";
+
+export interface PostmortemSummary {
+  lost_total: number; caught: number; partial: number; missed: number;
+  catch_rate: number; strict_catch_rate: number; false_alarm_count: number; precision_high: number;
+}
+
+export interface PostmortemItem {
+  customer_id: string; probability: number; risk: RiskLevel; outcome: Outcome;
+  contract: string; reason: string; reason_feature: string; action: string;
+}
+
+export interface PostmortemList { summary: PostmortemSummary; total: number; items: PostmortemItem[] }
+
+// backend/app/main.py -> GET /api/postmortem/{id} yanıtı
+export interface PostmortemDetail {
+  customer_id: string; actual_churn: boolean; probability: number; risk: RiskLevel; outcome: Outcome;
+  contract: string; tenure_months: number; monthly_charges: number; total_charges: number | null;
+  reason: string; reason_feature: string; top_reason_global_rank: number | null;
+  action: string; action_applied: boolean | null; action_applied_note: string;
+}
+
 // backend/app/main.py -> GET /api/model-report yanıtı
 export interface ModelReport {
   models: ModelMetrics[];

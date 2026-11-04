@@ -1,0 +1,30 @@
+{
+  "task": "kayip-musteri-postmortem",
+  "reviewed_at": "2026-11-04T00:00:00Z",
+  "reviewer_note": "Codex başarısız (codex CLI kurulu değil, exit 127), yedek kullanıldı",
+  "summary": "AC-1..AC-10, AC-S1, AC-S2 kodda ve 24 geçen testte tutarlı. Id eşleşmesi == ile yapılıyor; 503 sarmalayıcı iki uçta da iki veri kaynağını kapsıyor; frontend postmortem isteğini yalnızca actual_churn true iken atıyor. Ana risk: _load yalnızca OSError/ValueError/KeyError yakalıyor.",
+  "findings": [
+    {"severity": "medium", "category": "reliability", "file": "backend/app/main.py", "issue": "_load yalnızca (OSError, ValueError, KeyError) yakalıyor; başka bir yükleme istisnası 503 yerine 500 döner.", "better_approach": "Yükleme çağrısı için Exception yakalayıp logger.exception + 503 dön, ya da AC-7'nin kapsamını 'dosya/ayrıştırma hataları' olarak daralt.", "reason": "atdd.md AC-7 genel olarak 'bir exception fırlatır' diyor.", "source": "obss-red-team"},
+    {"severity": "low", "category": "test-gap", "file": "backend/tests/test_postmortem.py", "issue": "Detay ucundaki _load(load_json) yolunun 503'e düştüğü senaryo test edilmiyor; yalnızca load_customers monkeypatch'leniyor.", "better_approach": "load_json'u hata fırlatacak şekilde monkeypatch eden ayrı bir test ekle.", "reason": "Davranış Sözleşmesi satır 5 her iki veri kaynağını da kapsıyor.", "source": "obss-red-team"},
+    {"severity": "low", "category": "performance", "file": "artifacts/kayip-musteri-postmortem/verify_report.md", "issue": "performance_target (p95 <300ms / <100ms) ölçülmedi.", "better_approach": "Basit bir zaman ölçümü yap ve rapora yaz.", "reason": "atdd.md Benchmark hedefi.", "source": "obss-red-team"},
+    {"severity": "low", "category": "test-gap", "file": "artifacts/kayip-musteri-postmortem/verify_report.md", "issue": "coverage_target 90 ölçülmedi (pytest-cov yok).", "better_approach": "pytest-cov ile ölç.", "reason": "atdd.md frontmatter coverage_target.", "source": "obss-red-team"},
+    {"severity": "low", "category": "security", "file": "backend/tests/test_postmortem.py", "issue": "Encoded traversal denemesi router seviyesinde 404'e düşüyor; uygulama logu oluşmuyor.", "better_approach": "Risks bölümüne bilinen sınırlama olarak not et.", "reason": "AC-S1 karşılanıyor; yalnızca operatör görünürlüğü notu.", "source": "obss-red-team"},
+    {"severity": "low", "category": "architecture", "file": "backend/app/main.py, web/src/lib/types.ts", "issue": "Yanıt şemaları backend'de Pydantic olmadan, frontend'de elle tekrar ediliyor.", "better_approach": "İleride response_model + openapi-typescript kullanılabilir.", "reason": "Mevcut proje deseniyle tutarlı; ileride drift riski oluşturur. Bu görevin kapsamı dışında.", "source": "obss-red-team"}
+  ],
+  "strengths": [
+    "_load iki uçta da tüm veri yükleme çağrılarını sarıyor (AC-7, AC-S2).",
+    "customerID birebir eşitlikle eşleşiyor (AC-S1).",
+    "PostmortemSection yalnızca actual_churn true iken mount ediliyor (AC-12).",
+    "summary filtresiz hesaplanıyor, filtre yalnızca items'a uygulanıyor (AC-3).",
+    "OutcomeBadge tek yerde tanımlanıp iki ekranda kullanılıyor."
+  ],
+  "risks": [
+    "Coverage, security-scan ve vision-test gate'leri INCONCLUSIVE/atlanmış durumda.",
+    "_load'un dar istisna listesi ileride 500 regresyonuna yol açabilir."
+  ],
+  "caveman_review": {"complexity": "low", "unnecessary_files": 0, "unnecessary_helpers": 0, "unnecessary_abstractions": 0},
+  "scope_review": {"matches_atdd": true, "scope_expansion": false},
+  "ready_to_commit": {"atdd_satisfied": true, "tests_passed": true, "no_critical_findings": true, "scope_respected": true, "caveman_satisfied": true, "security_acceptable": true, "maintainability_acceptable": true, "no_blocking_risks": true},
+  "verdict": "approve-with-changes",
+  "resolution": "2026-11-04: medium/reliability (_load except Exception) ve shap load_json 503 test-gap kapatıldı; 27 test geçiyor. Diğer low bulgular açık (perf/coverage ölçümü, traversal log notu, şema üretimi)."
+}
