@@ -28,7 +28,7 @@
     "xgboost": 0.9290793309607466
   },
   "best_model": "random_forest",
-  "target_roc_auc": 0.84,
+  "target_roc_auc": 0.8,
   "target_met": true,
   "dataset": {
     "name": "OpenML Churn",

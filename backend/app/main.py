@@ -34,10 +34,16 @@ DATASETS = {
     "telco": {"dir": None, "name": "IBM Telco Customer Churn", "raw": "data/telco_churn_raw.csv"},
     "openml_churn": {"dir": ROOT / "outputs" / "openml_churn", "name": "OpenML Churn", "raw": None},
 }
-_DATASET_NAME = os.environ.get("DATASET", "telco")
-if _DATASET_NAME not in DATASETS:
-    raise ValueError(f"Bilinmeyen DATASET: {_DATASET_NAME}. Geçerli: {', '.join(DATASETS)}")
-ACTIVE = DATASETS[_DATASET_NAME]
+
+def resolve_active(value):
+    if value is None:
+        return DATASETS["telco"]
+    if value in DATASETS:
+        return DATASETS[value]
+    raise ValueError(f"Bilinmeyen DATASET: {value}. Geçerli: {', '.join(DATASETS)}")
+
+
+ACTIVE = resolve_active(os.environ.get("DATASET"))
 
 
 def _data_dir() -> Path:

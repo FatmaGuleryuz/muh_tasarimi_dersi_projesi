@@ -27,5 +27,6 @@
   "caveman_review": {"complexity": "medium", "unnecessary_files": 0, "unnecessary_helpers": 0, "unnecessary_abstractions": 0},
   "scope_review": {"matches_atdd": true, "scope_expansion": true},
   "ready_to_commit": {"atdd_satisfied": true, "tests_passed": true, "no_critical_findings": true, "scope_respected": true, "caveman_satisfied": true, "security_acceptable": true, "maintainability_acceptable": true, "no_blocking_risks": true},
-  "verdict": "approve-with-changes"
+  "verdict": "approve-with-changes",
+  "resolution": "2026-11-09: İki medium bulgu kapatıldı. (1) DATASET doğrulaması saf resolve_active() fonksiyonuna çıkarıldı; reload tabanlı test kaldırıldı, yerine 3 doğrudan test geldi; testler normal ve ters dosya sırasında 66/66 geçiyor. (2) target_roc_auc profile taşındı (telco 0.84, openml_churn 0.80); openml yeniden eğitildi, yalnızca metrics.json değişti (target_roc_auc 0.80). Low bulgular açık."
 }

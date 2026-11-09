@@ -109,6 +109,11 @@ def test_profiles_have_telco_and_openml_churn_with_openml_paths_and_target():
     assert prof["target"] == "class"
 
 
+def test_profiles_carry_target_roc_auc_per_dataset():
+    assert tm.PROFILES["telco"]["target_roc_auc"] == 0.84
+    assert tm.PROFILES["openml_churn"]["target_roc_auc"] == 0.80
+
+
 # ---------------------------------------------------------------------------
 # AC-6: bilinmeyen veri seti -> exit 2, tam satır, dosya yok
 # ---------------------------------------------------------------------------
@@ -211,6 +216,12 @@ def test_ac1_ac4_ac12_smoke_training_writes_six_outputs_and_logs_summary(tmp_pat
     nonblank = [line for line in capsys.readouterr().out.splitlines() if line.strip()]
     assert re.fullmatch(r"Eğitim tamamlandı: profil=openml_churn ROC-AUC=0\.\d{4}", nonblank[-1])
 
+    # Hedef eşiği profilden gelir; target_met gerçek en iyi ROC-AUC ile tutarlı olmalı
+    metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+    best_auc = metrics["models"][metrics["best_model"]]["roc_auc"]
+    assert metrics["target_roc_auc"] == 0.80
+    assert metrics["target_met"] == (best_auc >= 0.80)
+
 
 # ---------------------------------------------------------------------------
 # AC-1 (hash): smoke eğitimi kökteki Telco çıktılarını değiştirmez
@@ -254,5 +265,6 @@ def test_ac1_real_openml_metrics_meet_roc_auc_threshold():
     metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
 
     best = metrics["best_model"]
+    assert metrics["target_roc_auc"] == 0.80
     assert metrics["models"][best]["roc_auc"] >= 0.80
     assert metrics["dataset"]["name"] == "OpenML Churn"

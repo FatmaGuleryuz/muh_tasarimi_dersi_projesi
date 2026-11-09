@@ -2,11 +2,9 @@
 
 Kapsam: atdd.md AC-2, AC-3, AC-5, AC-9, AC-10 ve Davranış Sözleşmesi 1b, 2b, 3b, 9.
 Testler GERÇEK çıktı dosyalarını okur (telco: kök; openml_churn: outputs/openml_churn/).
-monkeypatch yalnızca aktif profil seçimi için kullanılır (main.ACTIVE). AC-9 modülü
-DATASET ortam değişkeniyle yeniden yükler; bu yüzden dosyanın sonunda ve finally ile
-modül geri yüklenir.
+monkeypatch yalnızca aktif profil seçimi için kullanılır (main.ACTIVE). AC-9 doğrulaması
+saf fonksiyon main.resolve_active üzerinden yapılır; modül yeniden yüklenmez.
 """
-import importlib
 import re
 from pathlib import Path
 
@@ -186,16 +184,19 @@ def test_ac10_missing_output_dir_returns_503_on_data_endpoints(monkeypatch, tmp_
 
 
 # ---------------------------------------------------------------------------
-# AC-9: DATASET=xyz ile modül import edilirken ValueError; modül sonra geri yüklenir.
-# DİKKAT: bu test dosyanın sonunda; reload sonrası modül durumu finally'de düzeltilir.
+# AC-9: DATASET doğrulaması saf fonksiyonda (resolve_active); modül yeniden yüklenmez.
 # ---------------------------------------------------------------------------
 
-def test_ac9_unknown_dataset_env_raises_value_error_on_import(monkeypatch):
-    monkeypatch.setenv("DATASET", "xyz")
-    try:
-        with pytest.raises(ValueError) as excinfo:
-            importlib.reload(main)
-        assert str(excinfo.value) == DATASET_ENV_ERROR
-    finally:
-        monkeypatch.delenv("DATASET", raising=False)
-        importlib.reload(main)
+def test_ac9_resolve_active_unknown_value_raises_value_error():
+    with pytest.raises(ValueError) as excinfo:
+        main.resolve_active("xyz")
+
+    assert str(excinfo.value) == DATASET_ENV_ERROR
+
+
+def test_ac9_resolve_active_none_returns_telco_profile():
+    assert main.resolve_active(None) is main.DATASETS["telco"]
+
+
+def test_ac9_resolve_active_openml_churn_returns_openml_profile():
+    assert main.resolve_active("openml_churn") is main.DATASETS["openml_churn"]

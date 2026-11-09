@@ -26,6 +26,11 @@
   openml eşiği (0.80) yalnızca testte uygulanıyor. Sonuç hedefin üstünde olduğu için etkisi yok, ama tutarsızlık var.
 - outputs/openml_churn/model.joblib 5.2 MB; commit'e girecek (R2).
 
+## Red-team sonrası düzeltme turu (2026-11-09)
+- `resolve_active()` eklendi; reload'lu AC-9 testi kaldırıldı, yerine 3 doğrudan test geldi.
+- Hedef eşiği profile taşındı (telco 0.84, openml 0.80). OpenML yeniden eğitildi; ROC-AUC 0.9288 aynı kaldı ve yalnızca metrics.json değişti.
+- `pytest backend/tests` → **66 passed**. Dosyalar ters sırada çalıştırıldığında da 66 passed.
+
 ## Refactor Aday Kontrolü
 Refactor adayı: `src/train_model.py::_train` uzun (eski main gövdesi taşındı). Ölçülebilir bir tekrar yok, davranışı koruyor.
 Kullanıcıya isteğe bağlı olarak önerilir; otomatik çalıştırılmadı.

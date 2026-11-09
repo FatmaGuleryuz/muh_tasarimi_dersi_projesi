@@ -34,7 +34,6 @@ from xgboost import XGBClassifier
 warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parents[1]  # proje koku
-TARGET_ROC_AUC = 0.84
 RANDOM_STATE = 42
 
 REASON_SOLUTIONS = {
@@ -140,6 +139,7 @@ PROFILES = {
         "engineer": engineer_features,
         "reasons": REASON_SOLUTIONS,
         "name": "IBM Telco Customer Churn",
+        "target_roc_auc": 0.84,
     },
     "openml_churn": {
         "raw_path": "data/openml_churn.arff",
@@ -151,6 +151,7 @@ PROFILES = {
         "engineer": engineer_openml,
         "reasons": OPENML_REASON_SOLUTIONS,
         "name": "OpenML Churn",
+        "target_roc_auc": 0.80,
     },
 }
 
@@ -263,9 +264,10 @@ def _train(raw_df, n_missing, prof, dst, sample, n_iter):
     best_name = max(results, key=lambda k: results[k]["roc_auc"])
     best_model = models[best_name]
     best_auc = results[best_name]["roc_auc"]
-    target_met = best_auc >= TARGET_ROC_AUC
+    target_roc_auc = prof["target_roc_auc"]
+    target_met = best_auc >= target_roc_auc
 
-    print(f"[train] En iyi model: {best_name} (ROC-AUC={best_auc:.4f}, hedef={TARGET_ROC_AUC}, karsilandi={target_met})")
+    print(f"[train] En iyi model: {best_name} (ROC-AUC={best_auc:.4f}, hedef={target_roc_auc}, karsilandi={target_met})")
 
     # --- SHAP neden skorlama (en iyi modelle) ---
     if best_name == "logistic_regression":
@@ -331,7 +333,7 @@ def _train(raw_df, n_missing, prof, dst, sample, n_iter):
             "xgboost": float(xgb_cv_auc),
         },
         "best_model": best_name,
-        "target_roc_auc": TARGET_ROC_AUC,
+        "target_roc_auc": target_roc_auc,
         "target_met": target_met,
         "dataset": {
             "name": prof["name"],
