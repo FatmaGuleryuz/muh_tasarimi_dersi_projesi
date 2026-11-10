@@ -1,9 +1,9 @@
-import type { CustomerDetail, CustomerList, ModelReport, Outcome, PostmortemDetail, PostmortemList, RiskLevel, Summary } from "./types";
+import type { CustomerDetail, CustomerList, InterventionPlans, ModelReport, Outcome, PlanRisk, PostmortemDetail, PostmortemList, PredictRequest, PredictResponse, RiskLevel, Summary } from "./types";
 
-async function getJson<T>(url: string): Promise<T> {
-  const res = await fetch(url);
+async function getJson<T>(url: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(url, init);
   if (!res.ok) {
-    if (res.status === 404) throw new Error("Müşteri bulunamadı");
+    if (res.status === 404 && !init) throw new Error("Müşteri bulunamadı");
     let detail: string | undefined;
     try {
       const body = await res.json();
@@ -40,3 +40,17 @@ export function fetchPostmortem(opts: { outcome?: Outcome | "" } = {}): Promise<
 export const fetchPostmortemDetail = (id: string) => getJson<PostmortemDetail>(`/api/postmortem/${encodeURIComponent(id)}`);
 
 export const EXPORT_HIGH_RISK_URL = "/api/export/high-risk.csv";
+
+export const predict = (body: PredictRequest, signal?: AbortSignal) =>
+  getJson<PredictResponse>("/api/predict", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+  });
+
+export const fetchInterventionPlans = (risk: PlanRisk) =>
+  getJson<InterventionPlans>(`/api/intervention-plans?risk=${encodeURIComponent(risk)}`);
+
+export const interventionExportUrl = (action: string, risk: PlanRisk) =>
+  `/api/intervention-plans/export.csv?action=${encodeURIComponent(action)}&risk=${encodeURIComponent(risk)}`;

@@ -6,6 +6,8 @@ import CustomerDetail from "./pages/CustomerDetail";
 import ComingSoon from "./pages/ComingSoon";
 import ModelReports from "./pages/ModelReports";
 import LossAnalysis from "./pages/LossAnalysis";
+import ChurnPrediction from "./pages/ChurnPrediction";
+import InterventionPlans from "./pages/InterventionPlans";
 
 export default function App() {
   return (
@@ -15,8 +17,8 @@ export default function App() {
         <Route path="musteri-riski" element={<CustomerRisk />} />
         <Route path="musteri-riski/:id" element={<CustomerDetail />} />
         <Route path="kayip-analizi" element={<LossAnalysis />} />
-        <Route path="kayip-tahmini" element={<ComingSoon title="Kayıp Tahmini" />} />
-        <Route path="mudahale-planlari" element={<ComingSoon title="Müdahale Planları" />} />
+        <Route path="kayip-tahmini" element={<ChurnPrediction />} />
+        <Route path="mudahale-planlari" element={<InterventionPlans />} />
         <Route path="model-ve-raporlar" element={<ModelReports />} />
         <Route path="*" element={<ComingSoon title="Sayfa bulunamadı" />} />
       </Route>

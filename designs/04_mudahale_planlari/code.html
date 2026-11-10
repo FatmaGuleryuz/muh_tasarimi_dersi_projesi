@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"outline-variant":"#c2c8c1","on-secondary":"#ffffff","surface-container-highest":"#e5e2e1","on-tertiary":"#ffffff","surface":"#fcf9f8","tertiary-fixed":"#ffdcbf","primary-fixed-dim":"#aeceb5","inverse-primary":"#aeceb5","on-surface-variant":"#424843","tertiary":"#321900","surface-tint":"#486550","on-secondary-fixed":"#00210e","on-tertiary-fixed":"#2d1600","on-secondary-container":"#406c4e","tertiary-container":"#502b00","surface-container-lowest":"#ffffff","secondary-container":"#baebc5","surface-container-high":"#eae7e7","surface-dim":"#dcd9d9","primary-container":"#1e3a28","surface-bright":"#fcf9f8","on-primary-container":"#85a48d","on-primary":"#ffffff","secondary":"#3b684a","surface-container":"#f0eded","error":"#ba1a1a","error-container":"#ffdad6","primary-fixed":"#caebd0","on-surface":"#1c1b1b","on-primary-fixed":"#042111","on-background":"#1c1b1b","inverse-on-surface":"#f3f0ef","inverse-surface":"#313030","surface-variant":"#e5e2e1","surface-container-low":"#f6f3f2","background":"#fcf9f8","primary":"#072414","on-tertiary-container":"#d88b3b","secondary-fixed":"#bdeec8","tertiary-fixed-dim":"#ffb874","secondary-fixed-dim":"#a2d2ad","on-primary-fixed-variant":"#314d3a","on-tertiary-fixed-variant":"#6b3b00","on-error-container":"#93000a","on-error":"#ffffff","outline":"#727972","on-secondary-fixed-variant":"#234f33"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","gutter-desktop":"1.5rem","gutter":"1.25rem","space-xs":"0.25rem","margin":"1rem","space-lg":"1.5rem","space-md":"1rem","space-xl":"2rem","margin-desktop":"2rem"},"fontFamily":{"body-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"]},"fontSize":{"body-sm":["0.75rem",{"lineHeight":"1.125rem","fontWeight":"400"}],"headline-lg":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-lg-mobile":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-sm":["1.125rem",{"lineHeight":"1.625rem","fontWeight":"600"}],"headline-md":["1.375rem",{"lineHeight":"1.875rem","letterSpacing":"-0.01em","fontWeight":"600"}],"display":["3rem",{"lineHeight":"3.5rem","letterSpacing":"-0.03em","fontWeight":"700"}],"label-lg":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"600"}],"label-sm":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["0.875rem",{"lineHeight":"1.375rem","fontWeight":"400"}],"body-lg":["1rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"600"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-surface-container-highest z-50 flex flex-col justify-between select-none"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm border-b border-surface-container-highest"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary-container text-[20px]">analytics</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">Yetkin360</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Karar Destek</span></div></div><div class="px-space-md pt-space-lg"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline block mb-space-xs font-semibold">Ana Menü</span><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold"><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="genel-bakis" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Genel Bakış</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="musteri-riski" href="#"><span class="material-symbols-outlined text-[20px]">shield_with_heart</span><span>Müşteri Riski</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="kayip-tahmini" href="#"><span class="material-symbols-outlined text-[20px]">trending_down</span><span>Kayıp Tahmini</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="erken-uyarilar" href="#"><span class="material-symbols-outlined text-[20px]">notification_important</span><span>Erken Uyarılar</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="mudahale-planlari" href="#"><span class="material-symbols-outlined text-[20px]">rule_folder</span><span>Müdahale Planları</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="raporlar" href="#"><span class="material-symbols-outlined text-[20px]">assessment</span><span>Raporlar</span></a></nav></div></div><div class="flex flex-col border-t border-surface-container-highest"><div class="px-space-md py-space-sm"><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold"><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="sistem-ayarlari" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Sistem Ayarları</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" data-path="destek" href="#"><span class="material-symbols-outlined text-[20px]">help_outline</span><span>Destek</span></a></nav></div><div class="p-space-md border-t border-surface-container-highest bg-surface-container-lowest/60 flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary-container text-[18px]">person</span></div><div class="flex flex-col"><span class="font-label-md text-label-md font-semibold text-on-surface leading-tight">Dr. Engin Kutlay</span><span class="font-body-sm text-body-sm text-on-surface-variant">Baş Stratejist</span></div></div><button class="text-outline hover:text-on-surface p-space-xs rounded transition-colors" title="Çıkış Yap" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/90 backdrop-blur-md border-b border-surface-container-highest z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">Yetkin360 Karar Destek Paneli</span><span class="h-4 w-px bg-outline-variant"></span><div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-secondary">sync</span><span>Son Senkronizasyon: Bugün, 14:32</span></div></div><div class="flex items-center gap-space-sm"><button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-lowest border border-surface-container-highest hover:bg-surface-container rounded text-on-surface font-label-md text-label-md transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">filter_list</span><span>Filtrele</span></button><button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-lowest border border-surface-container-highest hover:bg-surface-container rounded text-on-surface font-label-md text-label-md transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">file_download</span><span>Dışa Aktar</span></button><span class="h-6 w-px bg-outline-variant mx-space-xs"></span><button class="relative p-space-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Üst Başlık Şeridi -->
+<section class="w-full border-b border-outline-variant/30 px-space-lg lg:px-margin-desktop py-space-xl">
+<div class="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col max-w-3xl">
+<div class="flex items-center gap-space-sm mb-space-xs">
+<span class="font-serif text-display leading-tight tracking-tight text-primary">Müdahale Planları</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm tracking-wider uppercase bg-surface-container-highest/80 text-on-surface-variant border border-outline-variant/40">
+            Aksiyon ve Kampanya Kümeleme
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Riskli müşterilerin model tarafından önerilen ilk proaktif aksiyona göre gruplandığı operasyonel müdahale havuzu.
+        </p>
+</div>
+<!-- Segmentli Filtre Kontrolü -->
+<div class="flex items-center self-start md:self-end bg-surface-container/60 p-1 rounded-full border border-outline-variant/30">
+<button class="px-space-md py-1 rounded-full font-label-md text-label-md font-semibold transition-all bg-primary-container text-on-primary shadow-sm" type="button">
+          Yüksek + Orta Risk
+        </button>
+<button class="px-space-md py-1 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" type="button">
+          Yalnızca Yüksek Risk
+        </button>
+</div>
+</div>
+</section>
+<!-- İstatistik Şeridi (Büyük Zarif Serif Sayılar, Kutusuz) -->
+<section class="w-full border-b border-outline-variant/30 px-space-lg lg:px-margin-desktop py-space-xl">
+<div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-y-space-lg gap-x-gutter-desktop divide-y md:divide-y-0 md:divide-x divide-outline-variant/25">
+<div class="flex flex-col md:pr-space-lg">
+<span class="font-serif text-[3.75rem] leading-none tracking-tight text-primary font-light">669</span>
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline mt-space-sm">
+          Hedeflenen Müşteri (Toplam Portföy)
+        </span>
+</div>
+<div class="flex flex-col pt-space-md md:pt-0 md:px-space-lg">
+<span class="font-serif text-[3.75rem] leading-none tracking-tight text-primary font-light">3</span>
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline mt-space-sm">
+          Aktif Müdahale Planı
+        </span>
+</div>
+<div class="flex flex-col pt-space-md md:pt-0 md:pl-space-lg">
+<span class="font-serif text-[3.75rem] leading-none tracking-tight text-primary font-light">%67,9</span>
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline mt-space-sm">
+          Küme Ortalama Kayıp Olasılığı
+        </span>
+</div>
+</div>
+</section>
+<!-- Ana İçerik: Planlar Listesi -->
+<section class="w-full px-space-lg lg:px-margin-desktop py-space-xl">
+<div class="max-w-[1440px] mx-auto flex flex-col">
+<!-- Bölüm Üst Başlığı -->
+<div class="flex items-center justify-between pb-space-md border-b border-outline-variant/40 text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase tracking-widest font-bold text-outline">
+          01 / Plan Listesi ve Dağılım
+        </span>
+<div class="hidden md:flex items-center gap-12 font-label-sm text-label-sm uppercase tracking-wider text-outline">
+<span class="w-28 text-right">Müşteri Adedi</span>
+<span class="w-24 text-right">Ort. Churn</span>
+<span class="w-32 text-right">Yüksek Risk Payı</span>
+<span class="w-6"></span>
+</div>
+</div>
+<!-- Plan 1 (Seçili / Açık Durum) -->
+<div class="flex flex-col border-b border-outline-variant/30 transition-colors">
+<!-- Satır Başlığı & Metrikler -->
+<div class="relative py-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md cursor-pointer select-none">
+<!-- Sol Aktif Çizgi Vurgusu -->
+<div class="absolute -left-space-lg lg:-left-margin-desktop top-0 bottom-0 w-1 bg-secondary"></div>
+<!-- Sol Başlık ve Tetikleyici -->
+<div class="flex items-start gap-space-md min-w-[340px]">
+<span class="font-serif text-headline-sm text-secondary font-light">01</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary font-semibold tracking-tight">
+                Uzun dönem sözleşmeye geçişte indirim
+              </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant/80 mt-0.5">
+                Tetikleyen neden: <span class="font-medium text-on-surface">Sözleşme: aylık taahhütsüz</span>
+</span>
+</div>
+</div>
+<!-- Orta: Çift Renkli İnce Dağılım Çubuğu -->
+<div class="flex-1 max-w-md mx-0 lg:mx-space-lg flex flex-col gap-1.5">
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="bg-error h-full" style="width: 50.7%;" title="Yüksek Risk: %50.7"></div>
+<div class="bg-on-tertiary-container h-full" style="width: 49.3%;" title="Orta Risk: %49.3"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline font-label-sm">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error inline-block"></span> 284 Yüksek Risk
+              </span>
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container inline-block"></span> 276 Orta Risk
+              </span>
+</div>
+</div>
+<!-- Sağ: Sayısal Kolonlar -->
+<div class="flex items-center justify-between lg:justify-end gap-6 md:gap-12 pt-2 lg:pt-0">
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-28">
+<span class="font-serif text-headline-sm text-primary font-medium">560</span>
+<span class="font-label-sm text-label-sm text-outline">%83.7 Pay</span>
+</div>
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-24">
+<span class="font-serif text-headline-sm text-primary font-medium">%68,1</span>
+<span class="font-label-sm text-label-sm text-outline">Ort. Olasılık</span>
+</div>
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-32">
+<span class="font-serif text-headline-sm text-error font-medium">284</span>
+<span class="font-label-sm text-label-sm text-outline">%50.7 Yüksek</span>
+</div>
+<div class="w-6 flex justify-end text-primary">
+<span class="material-symbols-outlined text-[22px]">keyboard_arrow_up</span>
+</div>
+</div>
+</div>
+<!-- SEÇİLİ PLANIN GENİŞLETİLMİŞ DETAY ALANI -->
+<div class="w-full pt-space-sm pb-space-xl flex flex-col gap-space-xl">
+<!-- a) Olasılık Ekseninde Nokta Dağılımı (Density Strip / Scatter Spectrum) -->
+<div class="w-full border-t border-b border-outline-variant/30 py-space-lg flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-bold text-on-surface">
+                  Olasılık Dağılımı Spektrumu
+                </span>
+<span class="font-body-sm text-body-sm text-outline">(0,40 - 1,00 aralığında 560 müşteri)</span>
+</div>
+<div class="flex items-center gap-space-md text-label-sm font-label-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span> Orta Eşik (0.40 - 0.70)
+                </span>
+<span class="inline-flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span> Kritik Eşik (≥ 0.70)
+                </span>
+</div>
+</div>
+<!-- Dağılım Çizgisi ve Scatter Dots -->
+<div class="relative w-full pt-6 pb-2">
+<!-- Dağılım Noktaları Havuzu (Scatter SVG) -->
+<div class="relative h-12 w-full overflow-hidden">
+<svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 1000 48">
+<!-- Orta Risk Kümesi Dots (0.40 - 0.70 eksen aralığı: x=%0 ile %50 arası) -->
+<circle cx="45" cy="24" fill="#d88b3b" fill-opacity="0.6" r="2.5"></circle>
+<circle cx="82" cy="18" fill="#d88b3b" fill-opacity="0.5" r="2"></circle>
+<circle cx="110" cy="30" fill="#d88b3b" fill-opacity="0.7" r="3"></circle>
+<circle cx="135" cy="22" fill="#d88b3b" fill-opacity="0.6" r="2.5"></circle>
+<circle cx="160" cy="14" fill="#d88b3b" fill-opacity="0.4" r="2"></circle>
+<circle cx="180" cy="26" fill="#d88b3b" fill-opacity="0.8" r="3"></circle>
+<circle cx="210" cy="20" fill="#d88b3b" fill-opacity="0.6" r="2.5"></circle>
+<circle cx="230" cy="32" fill="#d88b3b" fill-opacity="0.5" r="2"></circle>
+<circle cx="255" cy="16" fill="#d88b3b" fill-opacity="0.7" r="3.5"></circle>
+<circle cx="280" cy="24" fill="#d88b3b" fill-opacity="0.5" r="2"></circle>
+<circle cx="310" cy="28" fill="#d88b3b" fill-opacity="0.6" r="2.5"></circle>
+<circle cx="340" cy="18" fill="#d88b3b" fill-opacity="0.8" r="3"></circle>
+<circle cx="370" cy="22" fill="#d88b3b" fill-opacity="0.6" r="2"></circle>
+<circle cx="395" cy="15" fill="#d88b3b" fill-opacity="0.9" r="3.5"></circle>
+<circle cx="420" cy="31" fill="#d88b3b" fill-opacity="0.7" r="2.5"></circle>
+<circle cx="450" cy="23" fill="#d88b3b" fill-opacity="0.85" r="3"></circle>
+<circle cx="480" cy="19" fill="#d88b3b" fill-opacity="0.7" r="2"></circle>
+<!-- Kritik Eşik Çizgisi Ayırıcı İşaret -->
+<line stroke="#ba1a1a" stroke-dasharray="3 3" stroke-opacity="0.4" stroke-width="1" x1="500" x2="500" y1="0" y2="48"></line>
+<!-- Yüksek Risk Yoğun Kümesi Dots (0.70 - 1.00 eksen aralığı: x=%50 ile %100 arası) -->
+<circle cx="515" cy="25" fill="#ba1a1a" fill-opacity="0.8" r="3"></circle>
+<circle cx="530" cy="17" fill="#ba1a1a" fill-opacity="0.7" r="2.5"></circle>
+<circle cx="545" cy="32" fill="#ba1a1a" fill-opacity="0.85" r="3.5"></circle>
+<circle cx="560" cy="20" fill="#ba1a1a" fill-opacity="0.6" r="2"></circle>
+<circle cx="580" cy="14" fill="#ba1a1a" fill-opacity="0.9" r="3"></circle>
+<circle cx="600" cy="28" fill="#ba1a1a" fill-opacity="0.95" r="4"></circle>
+<circle cx="620" cy="22" fill="#ba1a1a" fill-opacity="0.8" r="3"></circle>
+<circle cx="640" cy="18" fill="#ba1a1a" fill-opacity="0.75" r="2.5"></circle>
+<circle cx="665" cy="30" fill="#ba1a1a" fill-opacity="0.85" r="3"></circle>
+<circle cx="690" cy="15" fill="#ba1a1a" fill-opacity="0.95" r="4"></circle>
+<circle cx="710" cy="24" fill="#ba1a1a" fill-opacity="0.7" r="2.5"></circle>
+<circle cx="735" cy="21" fill="#ba1a1a" fill-opacity="0.9" r="3.5"></circle>
+<circle cx="760" cy="27" fill="#ba1a1a" fill-opacity="0.85" r="3"></circle>
+<circle cx="785" cy="16" fill="#ba1a1a" fill-opacity="0.8" r="2.5"></circle>
+<circle cx="810" cy="23" fill="#ba1a1a" fill-opacity="0.95" r="4"></circle>
+<circle cx="835" cy="31" fill="#ba1a1a" fill-opacity="0.8" r="3"></circle>
+<circle cx="860" cy="19" fill="#ba1a1a" fill-opacity="0.9" r="3"></circle>
+<circle cx="885" cy="25" fill="#ba1a1a" fill-opacity="0.75" r="2"></circle>
+<circle cx="915" cy="22" fill="#ba1a1a" fill-opacity="0.9" r="3.5"></circle>
+<circle cx="945" cy="18" fill="#ba1a1a" fill-opacity="0.85" r="3"></circle>
+<circle cx="975" cy="24" fill="#ba1a1a" fill-opacity="0.8" r="2.5"></circle>
+</svg>
+</div>
+<!-- Yatay Eksen Cetveli -->
+<div class="w-full h-px bg-outline-variant/60 relative">
+<div class="absolute left-0 top-0 w-px h-2 bg-outline-variant"></div>
+<div class="absolute left-1/4 top-0 w-px h-2 bg-outline-variant"></div>
+<div class="absolute left-2/4 top-0 w-px h-2 bg-error"></div>
+<div class="absolute left-3/4 top-0 w-px h-2 bg-outline-variant"></div>
+<div class="absolute right-0 top-0 w-px h-2 bg-outline-variant"></div>
+</div>
+<!-- Eksen Metinleri -->
+<div class="w-full flex justify-between items-center pt-2 font-mono text-[11px] text-outline">
+<span>0,40 (Eşik)</span>
+<span>0,55</span>
+<span class="text-error font-medium">0,70 (Kritik Eşik)</span>
+<span>0,85</span>
+<span>1,00</span>
+</div>
+</div>
+</div>
+<!-- b) Detay Müşteri Tablosu (Tamamen Düz, Satır Çizgili, Kutusuz) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-primary font-serif">
+                Bu Plana Atanan Öncelikli Müşteriler <span class="font-sans font-normal text-body-md text-outline">(İlk 5 Gösteriliyor)</span>
+</span>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-secondary hover:text-primary transition-colors underline underline-offset-4 decoration-outline-variant" href="#">
+<span>CSV İndir (560 Kayıt)</span>
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</a>
+</div>
+<!-- Tablo -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/40 text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-space-sm pr-space-md font-semibold">Müşteri ID &amp; Unvan</th>
+<th class="py-space-sm px-space-md font-semibold">Kayıp Olasılığı</th>
+<th class="py-space-sm px-space-md font-semibold">Risk Seviyesi</th>
+<th class="py-space-sm px-space-md font-semibold">Mevcut Sözleşme</th>
+<th class="py-space-sm px-space-md font-semibold">Ana Tetikleyici Neden</th>
+<th class="py-space-sm pl-space-md text-right font-semibold">Aksiyon Durumu</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 font-body-md text-body-md text-on-surface">
+<!-- Satır 1 -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md pr-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-primary">Teknopark Lojistik A.Ş.</span>
+<span class="font-mono text-body-sm text-outline">#CUST-98241</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-serif text-headline-sm text-error">
+                      %88,0
+                    </td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-error/10 text-error border border-error/20">
+                        Yüksek Risk
+                      </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm">
+                      Aylık (Taahhütsüz)
+                    </td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                      60 günde %40 sipariş düşüşü
+                    </td>
+<td class="py-space-md pl-space-md text-right">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-secondary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Müdahaleye Hazır
+                      </span>
+</td>
+</tr>
+<!-- Satır 2 -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md pr-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-primary">Ege Kimya Sanayi Ltd.</span>
+<span class="font-mono text-body-sm text-outline">#CUST-77412</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-serif text-headline-sm text-error">
+                      %82,4
+                    </td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-error/10 text-error border border-error/20">
+                        Yüksek Risk
+                      </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm">
+                      Aylık (Taahhütsüz)
+                    </td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                      Açık 3 kritik SLA bileti
+                    </td>
+<td class="py-space-md pl-space-md text-right">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-on-tertiary-container font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span> İletişim Bekliyor
+                      </span>
+</td>
+</tr>
+<!-- Satır 3 -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md pr-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-primary">Atlas Otomotiv Dağıtım</span>
+<span class="font-mono text-body-sm text-outline">#CUST-65029</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-serif text-headline-sm text-on-tertiary-container">
+                      %64,0
+                    </td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-on-tertiary-container/10 text-on-tertiary-container border border-on-tertiary-container/20">
+                        Orta Risk
+                      </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm">
+                      Aylık (Taahhütsüz)
+                    </td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                      Fiyat artışı sonrası teklif arayışı
+                    </td>
+<td class="py-space-md pl-space-md text-right">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-outline font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Taslak Hazır
+                      </span>
+</td>
+</tr>
+<!-- Satır 4 -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md pr-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-primary">Miraç Perakende Zincirleri</span>
+<span class="font-mono text-body-sm text-outline">#CUST-52910</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-serif text-headline-sm text-on-tertiary-container">
+                      %54,2
+                    </td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-on-tertiary-container/10 text-on-tertiary-container border border-on-tertiary-container/20">
+                        Orta Risk
+                      </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm">
+                      Aylık (Taahhütsüz)
+                    </td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                      API entegrasyon ping azalması
+                    </td>
+<td class="py-space-md pl-space-md text-right">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-outline font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> İncelemede
+                      </span>
+</td>
+</tr>
+<!-- Satır 5 -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md pr-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-primary">Kuzey Enerji ve İletişim</span>
+<span class="font-mono text-body-sm text-outline">#CUST-41008</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-serif text-headline-sm text-on-tertiary-container">
+                      %46,5
+                    </td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-on-tertiary-container/10 text-on-tertiary-container border border-on-tertiary-container/20">
+                        Orta Risk
+                      </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm">
+                      Aylık (Taahhütsüz)
+                    </td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                      Yıllık sözleşme yenileme tereddütü
+                    </td>
+<td class="py-space-md pl-space-md text-right">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-outline font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Sıraya Alındı
+                      </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Plan 2 (Kapalı Satır) -->
+<div class="group border-b border-outline-variant/30 py-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md hover:bg-surface-container-high/20 transition-colors cursor-pointer select-none">
+<!-- Sol Başlık ve Tetikleyici -->
+<div class="flex items-start gap-space-md min-w-[340px]">
+<span class="font-serif text-headline-sm text-outline font-light group-hover:text-primary transition-colors">02</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight">
+              İlk aylara özel karşılama / bağlılık programı
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant/80 mt-0.5">
+              Tetikleyen neden: <span class="font-medium text-on-surface">Müşteri olma süresi (Tenure &lt; 6 ay)</span>
+</span>
+</div>
+</div>
+<!-- Orta: Çift Renkli İnce Dağılım Çubuğu -->
+<div class="flex-1 max-w-md mx-0 lg:mx-space-lg flex flex-col gap-1.5">
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="bg-error h-full" style="width: 42.6%;" title="Yüksek Risk: %42.6"></div>
+<div class="bg-on-tertiary-container h-full" style="width: 57.4%;" title="Orta Risk: %57.4"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline font-label-sm">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error inline-block"></span> 46 Yüksek Risk
+            </span>
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container inline-block"></span> 62 Orta Risk
+            </span>
+</div>
+</div>
+<!-- Sağ: Sayısal Kolonlar -->
+<div class="flex items-center justify-between lg:justify-end gap-6 md:gap-12 pt-2 lg:pt-0">
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-28">
+<span class="font-serif text-headline-sm text-primary font-medium">108</span>
+<span class="font-label-sm text-label-sm text-outline">%16.1 Pay</span>
+</div>
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-24">
+<span class="font-serif text-headline-sm text-primary font-medium">%67,3</span>
+<span class="font-label-sm text-label-sm text-outline">Ort. Olasılık</span>
+</div>
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-32">
+<span class="font-serif text-headline-sm text-error font-medium">46</span>
+<span class="font-label-sm text-label-sm text-outline">%42.6 Yüksek</span>
+</div>
+<div class="w-6 flex justify-end text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">keyboard_arrow_down</span>
+</div>
+</div>
+</div>
+<!-- Plan 3 (Kapalı Satır) -->
+<div class="group border-b border-outline-variant/30 py-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md hover:bg-surface-container-high/20 transition-colors cursor-pointer select-none">
+<!-- Sol Başlık ve Tetikleyici -->
+<div class="flex items-start gap-space-md min-w-[340px]">
+<span class="font-serif text-headline-sm text-outline font-light group-hover:text-primary transition-colors">03</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight">
+              Kullanıma uygun daha düşük paket önerisi
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant/80 mt-0.5">
+              Tetikleyen neden: <span class="font-medium text-on-surface">Aylık ücret (Yüksek birim maliyet hissi)</span>
+</span>
+</div>
+</div>
+<!-- Orta: Çift Renkli İnce Dağılım Çubuğu -->
+<div class="flex-1 max-w-md mx-0 lg:mx-space-lg flex flex-col gap-1.5">
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="bg-on-tertiary-container h-full" style="width: 100%;" title="Orta Risk: %100"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline font-label-sm">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error inline-block"></span> 0 Yüksek Risk
+            </span>
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container inline-block"></span> 1 Orta Risk
+            </span>
+</div>
+</div>
+<!-- Sağ: Sayısal Kolonlar -->
+<div class="flex items-center justify-between lg:justify-end gap-6 md:gap-12 pt-2 lg:pt-0">
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-28">
+<span class="font-serif text-headline-sm text-primary font-medium">1</span>
+<span class="font-label-sm text-label-sm text-outline">%0.2 Pay</span>
+</div>
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-24">
+<span class="font-serif text-headline-sm text-primary font-medium">%67,4</span>
+<span class="font-label-sm text-label-sm text-outline">Ort. Olasılık</span>
+</div>
+<div class="flex flex-col text-left lg:text-right w-auto lg:w-32">
+<span class="font-serif text-headline-sm text-outline font-medium">0</span>
+<span class="font-label-sm text-label-sm text-outline">%0.0 Yüksek</span>
+</div>
+<div class="w-6 flex justify-end text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">keyboard_arrow_down</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Alt Dipnot / Editöryel İçgörü -->
+<section class="w-full px-space-lg lg:px-margin-desktop py-space-lg border-t border-outline-variant/30 mt-auto">
+<div class="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md text-on-surface-variant">
+<p class="font-serif italic text-headline-sm text-primary tracking-tight">
+        “Riskli müşterilerin %84'ü tek bir hamleye düşüyor; aksiyonların uygulanıp uygulanmadığı bu sistemde tutulmuyor.”
+      </p>
+<div class="flex items-center gap-space-xs font-mono text-body-sm text-outline shrink-0">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Son Model Kümeleme Çalışması: Bugün 14:32 • Kaynak: XGBoost v4.2 + K-Means / Rule Engine</span>
+</div>
+</div>
+</section>
+</div></main></div></body></html>

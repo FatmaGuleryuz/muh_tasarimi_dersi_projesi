@@ -72,3 +72,49 @@ export interface ModelReport {
   dataset: { name: string; rows: number; churn_rate: number };
   drivers: { feature: string; label: string; score: number }[];
 }
+
+// backend/app/main.py -> POST /api/predict (yalnızca Telco)
+export type ContractType = "Month-to-month" | "One year" | "Two year";
+export type InternetService = "DSL" | "Fiber optic" | "No";
+export type PaymentMethod = "Electronic check" | "Mailed check" | "Bank transfer (automatic)" | "Credit card (automatic)";
+
+export interface PredictRequest {
+  contract: ContractType;
+  tenure: number;
+  monthly_charges: number;
+  internet_service: InternetService;
+  tech_support: boolean;
+  online_security: boolean;
+  payment_method: PaymentMethod;
+  senior_citizen: boolean;
+}
+
+export interface PredictDriver { feature: string; label: string; contribution: number }
+
+export interface PredictResponse {
+  probability: number;
+  risk: RiskLevel;
+  model: string;
+  model_label: string;
+  roc_auc: number;
+  drivers: PredictDriver[];
+  action: string;
+  similar_count: number;
+}
+
+// backend/app/main.py -> GET /api/intervention-plans
+export type PlanRisk = "high_mid" | "high";
+
+export interface PlanCustomer { customer_id: string; probability: number; risk: RiskLevel; contract: string | null; reason: string }
+
+export interface InterventionPlan {
+  action: string; reason_feature: string; reason: string;
+  count: number; high: number; mid: number; share: number; avg_probability: number;
+  probabilities: number[]; customers: PlanCustomer[];
+}
+
+export interface InterventionPlans {
+  summary: { targeted: number; plans: number; avg_probability: number };
+  plans: InterventionPlan[];
+  insight: { top_action: string; top_share: number };
+}

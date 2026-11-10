@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yetkin360 - Karar Destek Paneli</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Plus Jakarta Sans Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-container-highest": "#e5e2e1",
+          "on-secondary-fixed-variant": "#234f33",
+          "secondary-fixed": "#bdeec8",
+          "primary-container": "#1e3a28",
+          "secondary-container": "#baebc5",
+          "tertiary-fixed": "#ffdcbf",
+          "primary": "#072414",
+          "surface-bright": "#fcf9f8",
+          "tertiary-fixed-dim": "#ffb874",
+          "on-tertiary": "#ffffff",
+          "on-primary-fixed-variant": "#314d3a",
+          "outline-variant": "#c2c8c1",
+          "on-secondary-fixed": "#00210e",
+          "primary-fixed": "#caebd0",
+          "on-tertiary-fixed-variant": "#6b3b00",
+          "inverse-primary": "#aeceb5",
+          "background": "#fcf9f8",
+          "surface": "#fcf9f8",
+          "on-error": "#ffffff",
+          "surface-container-high": "#eae7e7",
+          "on-primary": "#ffffff",
+          "on-primary-container": "#85a48d",
+          "inverse-on-surface": "#f3f0ef",
+          "surface-dim": "#dcd9d9",
+          "on-error-container": "#93000a",
+          "inverse-surface": "#313030",
+          "on-surface": "#1c1b1b",
+          "on-secondary": "#ffffff",
+          "error": "#ba1a1a",
+          "on-secondary-container": "#406c4e",
+          "secondary-fixed-dim": "#a2d2ad",
+          "error-container": "#ffdad6",
+          "on-tertiary-fixed": "#2d1600",
+          "on-tertiary-container": "#d88b3b",
+          "on-surface-variant": "#424843",
+          "surface-variant": "#e5e2e1",
+          "tertiary": "#321900",
+          "surface-tint": "#486550",
+          "on-primary-fixed": "#042111",
+          "on-background": "#1c1b1b",
+          "surface-container-lowest": "#ffffff",
+          "surface-container": "#f0eded",
+          "outline": "#727972",
+          "secondary": "#3b684a",
+          "tertiary-container": "#502b00",
+          "surface-container-low": "#f6f3f2",
+          "primary-fixed-dim": "#aeceb5"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "gutter-desktop": "1.5rem",
+          "space-sm": "0.5rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.25rem",
+          "margin-desktop": "2rem",
+          "space-md": "1rem",
+          "margin": "1rem"
+        },
+        "fontFamily": {
+          "headline-lg": ["Plus Jakarta Sans"],
+          "label-md": ["Plus Jakarta Sans"],
+          "label-sm": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "body-lg": ["Plus Jakarta Sans"],
+          "body-md": ["Plus Jakarta Sans"],
+          "display": ["Plus Jakarta Sans"],
+          "body-sm": ["Plus Jakarta Sans"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "label-lg": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "headline-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+          "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "600" }],
+          "headline-md": ["1.375rem", { "lineHeight": "1.875rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+          "headline-lg-mobile": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+          "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+          "body-md": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+          "display": ["3rem", { "lineHeight": "3.5rem", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+          "body-sm": ["0.75rem", { "lineHeight": "1.125rem", "fontWeight": "400" }],
+          "headline-sm": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+          "label-lg": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }]
+        }
+      }
+    }
+  };
+</script>
+<style>
+  @layer base {
+    html {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f6f3f2;
+      color: #1c1b1b;
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+</style>
+<meta content="web_dashboard" name="shell-type"/>
+</head>
+<body class="bg-surface-container-low text-on-surface antialiased selection:bg-secondary-container selection:text-primary">
+<!-- ==================== FIXED LEFT SIDEBAR (SideNavBar Component) ==================== -->
+<aside class="fixed top-0 left-0 bottom-0 w-64 flex flex-col justify-between py-6 px-4 z-40 bg-surface-container-lowest border-r border-outline-variant">
+<div class="flex flex-col gap-6">
+<!-- Brand & Header -->
+<div class="px-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm text-primary tracking-tight font-bold block leading-tight">Yetkin360</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium">Karar Destek Paneli</span>
+</div>
+</div>
+</div>
+<!-- Quick Action / CTA -->
+<div class="px-2">
+<button class="w-full flex items-center justify-center gap-2 bg-primary-container text-on-primary py-2.5 px-3 rounded text-label-md font-label-md hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="published_with_changes">published_with_changes</span>
+<span>Müdahale Başlat</span>
+</button>
+</div>
+<!-- Main Navigation Menu -->
+<nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-none">
+<!-- Tab: Genel Bakış -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="genel-bakis" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Genel Bakış</span>
+</a>
+<!-- Tab: Müşteri Riski -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="musteri-riski" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="group_remove">group_remove</span>
+<span class="text-label-md font-label-md">Müşteri Riski</span>
+</a>
+<!-- Active Tab: Kayıp Tahmini (Churn Analizi) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded bg-primary-container text-on-primary font-semibold shadow-none" data-path="kayip-tahmini" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="trending_down">trending_down</span>
+<span class="text-label-md font-label-md">Kayıp Tahmini</span>
+</a>
+<!-- Tab: Erken Uyarılar -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="erken-uyarilar" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="warning">warning</span>
+<span class="text-label-md font-label-md">Erken Uyarılar</span>
+</a>
+<!-- Tab: Müdahale Planları -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="mudahale-planlari" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="published_with_changes">published_with_changes</span>
+<span class="text-label-md font-label-md">Müdahale Planları</span>
+</a>
+<!-- Tab: Raporlar -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="raporlar" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="analytics">analytics</span>
+<span class="text-label-md font-label-md">Raporlar</span>
+</a>
+</nav>
+</div>
+<!-- Footer System Actions -->
+<div class="flex flex-col gap-1 pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="sistem-ayarlari" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Sistem Ayarları</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-low transition-colors" data-path="destek" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+<span class="text-label-md font-label-md">Destek</span>
+</a>
+<!-- Current Session Info -->
+<div class="mt-4 px-3 py-2.5 rounded bg-surface-container-low border border-outline-variant flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center text-label-sm font-label-sm font-bold">
+  EK
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-label-sm font-label-sm text-on-surface font-semibold truncate">Dr. Engin Kutlay</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[10px] leading-tight truncate">Baş Analist &amp; Direktör</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ==================== MAIN CONTENT WRAPPER ==================== -->
+<div class="pl-64 flex-1 flex flex-col min-h-screen">
+<!-- Top Navigation Bar (TopNavBar Component) -->
+<header class="h-16 bg-surface-container-lowest border-b border-outline-variant px-8 flex items-center justify-between sticky top-0 z-30">
+<!-- Left: Context Breadcrumb & Sync Status -->
+<div class="flex items-center gap-4">
+<div>
+<h1 class="text-headline-sm font-headline-sm text-primary font-bold tracking-tight">Yetkin360 Karar Destek Paneli</h1>
+</div>
+<div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-low border border-outline-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Son Senkronizasyon: Bugün, 14:32</span>
+</div>
+</div>
+<!-- Right: Global Actions & User Profile -->
+<div class="flex items-center gap-3">
+<!-- Secondary / Filter Trigger -->
+<button class="inline-flex items-center gap-1.5 px-3 py-2 rounded bg-surface-container-lowest border border-outline-variant text-on-surface text-label-md font-label-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="filter_list">filter_list</span>
+<span>Filtrele</span>
+</button>
+<!-- Primary Action: Export -->
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-primary-container text-on-primary text-label-md font-label-md hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="file_download">file_download</span>
+<span>Dışa Aktar</span>
+</button>
+<div class="h-5 w-px bg-outline-variant mx-1"></div>
+<!-- Notification Trigger -->
+<button class="w-9 h-9 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" title="Bildirimler">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+<!-- Profile Avatar -->
+<div class="flex items-center pl-2">
+<img alt="Dr. Engin Kutlay profil fotoğrafı" class="w-8 h-8 rounded object-cover border border-outline-variant" data-alt="A refined corporate headshot portrait of a senior executive leader in a dark charcoal bespoke suit against an architectural soft beige office background with subtle natural ambient lighting and high key clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_zlpGUFcgc-0Hm1kMu7Inf6XlipMRWyjT-oDpGwgmU2u6W7MPmvfmtqosbLqC5bGaHwDe_76rQm-57FE3jHS2BzhsjFDtGBsqGsoCfYi16TjloOa8ndotu_ycX5FzLnHAc2Mdbt1I1rrOAdQBv1M_LQtNafS7WwdIZT1sInX22RJkT3aQadDLp7Sj6y3atJrWGlpwvByISSa_wSdvE4g315I4jWaZqHqtfJ_AVolqeZhGIxNrcRX1APADPyCfp2pilFWwObX2TmU"/>
+</div>
+</div>
+</header>
+<!-- Main Workspace Content -->
+<main class="p-8 flex flex-col gap-6 max-w-7xl w-full mx-auto"><div class="flex flex-col w-full">
+<!-- Link external Google Serif font 'Newsreader' for high-editorial presence -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&amp;display=swap" rel="stylesheet"/>
+<style>
+    .font-editorial-serif {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 12px;
+      width: 12px;
+      border-radius: 9999px;
+      background: #072414;
+      cursor: pointer;
+      margin-top: -5px;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 2px;
+      background: #c2c8c1;
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+      background: #727972;
+    }
+  </style>
+<!-- ==================== TOP EDITORIAL HEADER STRIP ==================== -->
+<header class="w-full pb-6 border-b border-outline-variant flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col gap-1.5 max-w-2xl">
+<div class="flex items-center gap-3">
+<h2 class="font-editorial-serif text-3xl md:text-4xl text-primary font-normal tracking-tight">Kayıp Tahmini</h2>
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant">
+          What-If Simülasyonu
+        </span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant">
+        Varsayımsal müşteri parametrelerini değiştirerek anlık model çıktısını ve SHAP marjinal etkenlerini izleyin.
+      </p>
+</div>
+<!-- Editorial Model Metadata Passport -->
+<div class="flex items-center gap-3 self-start md:self-end text-label-sm font-label-sm text-on-surface-variant tracking-wide pb-0.5">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-semibold text-primary">XGBoost v4.2</span>
+</span>
+<span class="text-outline-variant">•</span>
+<span>ROC-AUC <strong class="text-on-surface font-semibold">0.847</strong></span>
+<span class="text-outline-variant">•</span>
+<span>Çıkarım <span class="text-on-surface">~6ms</span></span>
+</div>
+</header>
+<!-- ==================== 12-COLUMN MAIN EDITORIAL GRID ==================== -->
+<div class="grid grid-cols-12 gap-8 lg:gap-14 pt-8">
+<!-- ==================== LEFT COLUMN (5 COLUMNS): PARAMETERS ==================== -->
+<section class="col-span-12 lg:col-span-5 flex flex-col">
+<!-- Section Tag & Reset -->
+<div class="flex items-baseline justify-between pb-3 border-b border-outline-variant">
+<span class="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant">01 / Senaryo Parametreleri</span>
+<button class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary underline underline-offset-4 decoration-outline-variant transition-colors" id="reset-btn" type="button">
+          Varsayılana Sıfırla
+        </button>
+</div>
+<!-- Linear Parameter Fields (No Cards, Pure Editorial Rhythm) -->
+<form class="flex flex-col divide-y divide-outline-variant" onsubmit="event.preventDefault();">
+<!-- Row 1: Sözleşme Tipi -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface">Sözleşme Tipi</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[11px]">Taahhüt süresi bağlayıcılığı</span>
+</div>
+<div class="inline-flex items-center gap-4 text-label-md font-label-md">
+<button class="scenario-contract-btn text-primary font-bold border-b-2 border-primary pb-0.5" data-val="monthly" type="button">Aylık</button>
+<button class="scenario-contract-btn text-on-surface-variant hover:text-on-surface pb-0.5 border-b-2 border-transparent transition-colors" data-val="1yr" type="button">1 Yıl</button>
+<button class="scenario-contract-btn text-on-surface-variant hover:text-on-surface pb-0.5 border-b-2 border-transparent transition-colors" data-val="2yr" type="button">2 Yıl</button>
+</div>
+</div>
+<!-- Row 2: Müşteri Süresi (Tenure) -->
+<div class="py-3.5 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="text-body-md font-body-md font-medium text-on-surface" for="tenure-range">Müşteri Süresi</label>
+<span class="font-editorial-serif text-lg text-primary font-medium" id="tenure-val">6 Ay</span>
+</div>
+<div class="w-full pt-1">
+<input class="w-full accent-primary bg-transparent cursor-pointer" id="tenure-range" max="72" min="1" type="range" value="6"/>
+<div class="flex justify-between text-body-sm font-body-sm text-on-surface-variant text-[10px] pt-1">
+<span>Yeni (1 Ay)</span>
+<span>Sektör Ort. 24 Ay</span>
+<span>Sadık (72 Ay)</span>
+</div>
+</div>
+</div>
+<!-- Row 3: Aylık Ücret -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface" for="fee-input">Aylık Hizmet Tutarı</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[11px]">Sektör referansı: ₺ 1.150 / ay</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-body-md font-body-md font-medium text-on-surface-variant">₺</span>
+<input class="w-20 text-right bg-transparent border-0 border-b border-outline focus:border-primary focus:ring-0 p-0 text-headline-sm font-headline-sm font-bold text-primary tracking-tight" id="fee-input" type="text" value="1.450"/>
+<span class="text-body-sm font-body-sm text-on-surface-variant">/ ay</span>
+</div>
+</div>
+<!-- Row 4: İnternet Altyapısı -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface">İnternet Altyapısı</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[11px]">Şebeke bağlantı teknolojisi</span>
+</div>
+<div class="inline-flex items-center gap-3 text-label-md font-label-md">
+<button class="scenario-net-btn text-primary font-bold border-b-2 border-primary pb-0.5" data-val="fiber" type="button">Fiber Optik</button>
+<button class="scenario-net-btn text-on-surface-variant hover:text-on-surface pb-0.5 border-b-2 border-transparent transition-colors" data-val="dsl" type="button">DSL</button>
+<button class="scenario-net-btn text-on-surface-variant hover:text-on-surface pb-0.5 border-b-2 border-transparent transition-colors" data-val="none" type="button">Yok</button>
+</div>
+</div>
+<!-- Row 5: Teknik Destek Paketi -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface">Teknik Destek Paketi</label>
+<span class="text-body-sm font-body-sm text-error text-[11px] font-medium">Yok • Ayrılma katsayısı yüksek</span>
+</div>
+<div class="inline-flex items-center gap-3">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded bg-error-container text-on-error-container font-semibold hover:opacity-90 transition-opacity" id="toggle-tech-support" type="button">
+              Yok (Kritik Risk)
+            </button>
+</div>
+</div>
+<!-- Row 6: Çevrimiçi Güvenlik Servisi -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface">Çevrimiçi Güvenlik Servisi</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[11px]">Siber tehdit ve filtreleme</span>
+</div>
+<div class="inline-flex items-center gap-3 text-label-md font-label-md">
+<button class="scenario-sec-btn text-on-surface-variant hover:text-on-surface pb-0.5 border-b-2 border-transparent transition-colors" data-val="yes" type="button">Aktif</button>
+<button class="scenario-sec-btn text-primary font-bold border-b-2 border-primary pb-0.5" data-val="no" type="button">Yok</button>
+</div>
+</div>
+<!-- Row 7: Ödeme Kanalı -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface">Ödeme Kanalı</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[11px]">Tahsilat operasyon şekli</span>
+</div>
+<div class="relative">
+<select class="bg-transparent border-0 border-b border-outline text-label-md font-label-md font-semibold text-primary pr-6 py-0.5 pl-0 focus:ring-0 focus:border-primary cursor-pointer">
+<option selected="">Elektronik Çek (Manuel)</option>
+<option>Otomatik Kredi Kartı</option>
+<option>Banka Havalesi</option>
+<option>Posta Çeki</option>
+</select>
+</div>
+</div>
+<!-- Row 8: Demografi -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<label class="text-body-md font-body-md font-medium text-on-surface">Kıdemli Müşteri (65+)</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-[11px]">Demografik hassasiyet kümesi</span>
+</div>
+<div class="inline-flex items-center gap-3 text-label-md font-label-md">
+<button class="scenario-demo-btn text-primary font-bold border-b-2 border-primary pb-0.5" data-val="no" type="button">Hayır (Standart)</button>
+<button class="scenario-demo-btn text-on-surface-variant hover:text-on-surface pb-0.5 border-b-2 border-transparent transition-colors" data-val="yes" type="button">Evet (Kıdemli)</button>
+</div>
+</div>
+</form>
+<!-- Instant Inference Indicator Footer -->
+<div class="pt-4 flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant italic">
+<span class="material-symbols-outlined text-sm text-secondary" style="font-variation-settings: 'FILL' 1;">sync</span>
+<span>Parametre değişiklikleri anlık olarak modele yansıtılmaktadır.</span>
+</div>
+</section>
+<!-- ==================== RIGHT COLUMN (7 COLUMNS): INFERENCE & SHAP ==================== -->
+<section class="col-span-12 lg:col-span-7 flex flex-col justify-between">
+<div class="flex flex-col">
+<!-- Section Tag -->
+<div class="flex items-baseline justify-between pb-3 border-b border-outline-variant">
+<span class="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant">02 / Çıkarım ve Risk Analizi</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Güven Aralığı: <span class="text-primary font-semibold">%95 CI [68.2 - 75.4]</span></span>
+</div>
+<!-- Grand Editorial Metric & Verdict Block -->
+<div class="pt-6 pb-8 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
+<div class="flex flex-col">
+<span class="font-editorial-serif text-7xl sm:text-8xl lg:text-9xl font-normal text-primary tracking-tighter leading-none" id="churn-score">
+              %72
+            </span>
+<div class="pt-2">
+<span class="inline-block px-2.5 py-0.5 text-label-sm font-label-sm font-semibold rounded-full bg-error-container text-on-error-container">
+                Kritik Risk Alanı (&gt; %70)
+              </span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center border-l sm:border-outline-variant sm:pl-8">
+<p class="font-editorial-serif italic text-xl lg:text-2xl text-on-surface leading-snug">
+              Ayrılma eğilimi kritik eşiğin üzerinde; taahhütsüz sözleşme ve teknik destek eksikliği kırılganlığı tetikliyor.
+            </p>
+<span class="text-body-sm font-body-sm text-on-surface-variant pt-2">
+              Bu profildeki müşterilerin önümüzdeki 60 gün içinde aboneliğini sonlandırma olasılığı normal taban değerin 3.4 katıdır.
+            </span>
+</div>
+</div>
+<!-- Risk Spectrum Bar -->
+<div class="w-full pb-8 flex flex-col gap-2">
+<div class="relative w-full">
+<!-- 3-Segment Subtle Spectrum Track (6px) -->
+<div class="w-full h-1.5 flex rounded-none overflow-hidden">
+<div class="w-[40%] bg-secondary/80" title="Düşük Risk (0 - 0.40)"></div>
+<div class="w-[30%] bg-tertiary-fixed-dim" title="Orta Risk (0.40 - 0.70)"></div>
+<div class="w-[30%] bg-error" title="Kritik Risk (0.70 - 1.00)"></div>
+</div>
+<!-- Pointer at exactly %72 -->
+<div class="absolute -top-1 left-[72%] -translate-x-1/2 flex flex-col items-center">
+<span class="w-2.5 h-2.5 rotate-45 bg-primary"></span>
+</div>
+<!-- Threshold tick marks -->
+<div class="absolute -bottom-1 left-[40%] h-3 w-px bg-on-surface-variant/40"></div>
+<div class="absolute -bottom-1 left-[70%] h-3 w-px bg-on-surface-variant/40"></div>
+</div>
+<!-- Spectrum Scale Labels -->
+<div class="relative w-full flex justify-between text-label-sm font-label-sm text-on-surface-variant pt-2">
+<span>Düşük Risk (0.00)</span>
+<span class="absolute left-[40%] -translate-x-1/2 text-[10px]">Eşik: 0.40</span>
+<span class="absolute left-[70%] -translate-x-1/2 text-[10px]">Eşik: 0.70</span>
+<span class="absolute left-[72%] -translate-x-1/2 font-bold text-primary pt-3.5">▲ %72 Mevcut Senaryo</span>
+<span>Kritik Risk (1.00)</span>
+</div>
+</div>
+<!-- Bi-Directional SHAP Drivers (FT/NYT Editorial Style) -->
+<div class="pt-6 flex flex-col">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<h3 class="text-label-md font-label-md text-primary font-bold uppercase tracking-wider">
+              Risk Sürücüleri (SHAP Marjinal Etkisi)
+            </h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant">
+              ← Olasılığı Azaltanlar  |  Olasılığı Artıranlar →
+            </span>
+</div>
+<!-- SHAP Rows on Pure Editorial Grid -->
+<div class="flex flex-col divide-y divide-surface-container-highest">
+<!-- Driver 1: Aylık taahhütsüz sözleşme (+%28.4) -->
+<div class="py-2.5 grid grid-cols-12 items-center gap-2 text-body-sm font-body-sm">
+<span class="col-span-5 text-on-surface font-medium truncate">Aylık taahhütsüz sözleşme</span>
+<div class="col-span-7 flex items-center">
+<!-- Left side (Negative effect) -->
+<div class="w-1/2 flex justify-end pr-2 border-r border-outline">
+<!-- empty -->
+</div>
+<!-- Right side (Positive/Risk effect) -->
+<div class="w-1/2 flex items-center pl-2">
+<div class="h-3 bg-error rounded-none" style="width: 71%;"></div>
+<span class="pl-2 font-mono text-[11px] font-semibold text-error">+%28.4</span>
+</div>
+</div>
+</div>
+<!-- Driver 2: Teknik destek hizmeti bulunmaması (+%18.2) -->
+<div class="py-2.5 grid grid-cols-12 items-center gap-2 text-body-sm font-body-sm">
+<span class="col-span-5 text-on-surface font-medium truncate">Teknik destek hizmeti yokluğu</span>
+<div class="col-span-7 flex items-center">
+<div class="w-1/2 flex justify-end pr-2 border-r border-outline"></div>
+<div class="w-1/2 flex items-center pl-2">
+<div class="h-3 bg-error rounded-none" style="width: 45.5%;"></div>
+<span class="pl-2 font-mono text-[11px] font-semibold text-error">+%18.2</span>
+</div>
+</div>
+</div>
+<!-- Driver 3: Elektronik çek ile manuel ödeme (+%14.6) -->
+<div class="py-2.5 grid grid-cols-12 items-center gap-2 text-body-sm font-body-sm">
+<span class="col-span-5 text-on-surface font-medium truncate">Elektronik çek ile manuel ödeme</span>
+<div class="col-span-7 flex items-center">
+<div class="w-1/2 flex justify-end pr-2 border-r border-outline"></div>
+<div class="w-1/2 flex items-center pl-2">
+<div class="h-3 bg-error rounded-none" style="width: 36.5%;"></div>
+<span class="pl-2 font-mono text-[11px] font-semibold text-error">+%14.6</span>
+</div>
+</div>
+</div>
+<!-- Driver 4: Kısa müşteri süresi (6 ay) (+%11.2) -->
+<div class="py-2.5 grid grid-cols-12 items-center gap-2 text-body-sm font-body-sm">
+<span class="col-span-5 text-on-surface font-medium truncate">Kısa müşteri süresi (6 ay)</span>
+<div class="col-span-7 flex items-center">
+<div class="w-1/2 flex justify-end pr-2 border-r border-outline"></div>
+<div class="w-1/2 flex items-center pl-2">
+<div class="h-3 bg-error rounded-none" style="width: 28%;"></div>
+<span class="pl-2 font-mono text-[11px] font-semibold text-error">+%11.2</span>
+</div>
+</div>
+</div>
+<!-- Driver 5: Düzenli fatura ödeme geçmişi (-%8.4) -->
+<div class="py-2.5 grid grid-cols-12 items-center gap-2 text-body-sm font-body-sm">
+<span class="col-span-5 text-on-surface font-medium truncate">Düzenli fatura ödeme geçmişi</span>
+<div class="col-span-7 flex items-center">
+<div class="w-1/2 flex justify-end items-center pr-2 border-r border-outline">
+<span class="pr-2 font-mono text-[11px] font-semibold text-secondary">-%8.4</span>
+<div class="h-3 bg-secondary rounded-none" style="width: 21%;"></div>
+</div>
+<div class="w-1/2 flex items-center pl-2"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ==================== BOTTOM INTERVENTION: İLK HAMLE ==================== -->
+<div class="pt-6 mt-8 border-t border-outline-variant flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start md:items-center gap-3.5 flex-1">
+<span class="px-2 py-1 bg-primary text-on-primary font-mono text-label-sm font-label-sm font-bold tracking-wider rounded-none shrink-0">
+            İLK HAMLE
+          </span>
+<p class="font-editorial-serif italic text-body-lg font-body-lg text-on-surface leading-snug">
+            “2 yıllık taahhütlü pakete geçiş için %20 fatura indirimi ve ücretsiz 6 ay VIP destek tanımlayın; bu müdahale senaryo riskini <span class="font-semibold text-secondary not-italic">%34 seviyesine</span> geriletecektir.”
+          </p>
+</div>
+<a class="inline-flex items-center gap-1.5 text-label-md font-label-md text-primary font-bold hover:underline underline-offset-4 decoration-primary whitespace-nowrap self-end md:self-center" href="#musteri-riski">
+<span>Bu senaryoya uyan 142 müşteriyi gör</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</section>
+</div>
+<!-- Interactive What-If Simulation Script -->
+<script>
+    (function initWhatIfEngine() {
+      const tenureRange = document.getElementById('tenure-range');
+      const tenureVal = document.getElementById('tenure-val');
+      const churnScore = document.getElementById('churn-score');
+      const toggleTech = document.getElementById('toggle-tech-support');
+      const resetBtn = document.getElementById('reset-btn');
+
+      let techSupportActive = false;
+
+      function updateSimulation() {
+        const tenure = parseInt(tenureRange.value, 10);
+        tenureVal.textContent = tenure + ' Ay';
+
+        // Dynamic What-If recalculation formula
+        let score = 78 - Math.round(tenure * 0.45);
+        if (techSupportActive) {
+          score -= 16;
+        }
+        score = Math.max(12, Math.min(89, score));
+        churnScore.textContent = '%' + score;
+      }
+
+      if (tenureRange) {
+        tenureRange.addEventListener('input', updateSimulation);
+      }
+
+      if (toggleTech) {
+        toggleTech.addEventListener('click', function() {
+          techSupportActive = !techSupportActive;
+          if (techSupportActive) {
+            this.textContent = 'Aktif (Destek Mevcut)';
+            this.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded bg-secondary-container text-on-secondary-container font-semibold transition-opacity';
+          } else {
+            this.textContent = 'Yok (Kritik Risk)';
+            this.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded bg-error-container text-on-error-container font-semibold transition-opacity';
+          }
+          updateSimulation();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          tenureRange.value = 6;
+          techSupportActive = false;
+          toggleTech.textContent = 'Yok (Kritik Risk)';
+          toggleTech.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded bg-error-container text-on-error-container font-semibold transition-opacity';
+          updateSimulation();
+        });
+      }
+    })();
+  </script>
+</div></main>
+</div>
+</body></html>

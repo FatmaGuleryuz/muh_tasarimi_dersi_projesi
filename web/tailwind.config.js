@@ -15,7 +15,7 @@ export default {
         "row-line": "#E2E8F0",
         "row-hover": "#FBF9F5",
       },
-      fontFamily: { sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"] },
+      fontFamily: { sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"], serif: ['"Fraunces"', "Georgia", "serif"] },
       borderRadius: { DEFAULT: "4px", lg: "8px" },
       boxShadow: { none: "none" }, // tasarım sistemi: gölge yok, sadece 1px kenarlık
     },

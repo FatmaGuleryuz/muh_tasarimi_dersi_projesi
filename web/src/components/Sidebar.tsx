@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { BarChart3, ClipboardList, History, LayoutDashboard, Play, TrendingDown, Users } from "lucide-react";
 
@@ -10,10 +11,22 @@ const items = [
   { to: "/model-ve-raporlar", label: "Model ve Raporlar", icon: BarChart3 },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: () => void }) {
   const navigate = useNavigate();
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (open) ref.current?.querySelector<HTMLElement>("a, button")?.focus();
+  }, [open]);
+
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col justify-between border-r border-line bg-surface px-4 py-6">
+    <aside
+      ref={ref}
+      aria-label="Ana menü"
+      className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col justify-between border-r border-line bg-surface px-4 py-6 transition-transform duration-200 lg:visible lg:z-40 lg:translate-x-0 ${
+        open ? "translate-x-0" : "invisible -translate-x-full"
+      }`}
+    >
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-3 px-2">
           <div className="flex h-9 w-9 items-center justify-center rounded bg-forest text-white">
@@ -27,7 +40,10 @@ export default function Sidebar() {
 
         <button
           type="button"
-          onClick={() => navigate("/mudahale-planlari")}
+          onClick={() => {
+            navigate("/mudahale-planlari");
+            onClose?.();
+          }}
           className="mx-2 flex items-center justify-center gap-2 rounded bg-forest px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-forest-dark"
         >
           <Play size={14} /> Müdahale Başlat
@@ -39,6 +55,7 @@ export default function Sidebar() {
               key={to}
               to={to}
               end={end}
+              onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded px-3 py-2.5 text-xs font-semibold transition-colors ${
                   isActive ? "bg-forest text-white" : "text-ink-2 hover:bg-canvas"

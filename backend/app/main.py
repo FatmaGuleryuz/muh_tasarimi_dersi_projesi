@@ -15,8 +15,10 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 
 from .labels import CONTRACTS, label_for
+from .scenario import DEFAULT_SOLUTION, REASON_SOLUTIONS, build_row, explain, load_model
 
 logger = logging.getLogger(__name__)
 
@@ -265,7 +267,7 @@ def _load(loader, *args):
     try:
         return loader(*args)
     except Exception:
-        logger.exception("Postmortem veri kaynağı okunamadı")
+        logger.exception("Veri kaynağı okunamadı: %s", getattr(loader, "__name__", loader))
         raise HTTPException(status_code=503, detail="Veri kaynağı okunamadı")
 
 
@@ -348,4 +350,149 @@ def export_high_risk():
     return Response(
         body.encode("utf-8-sig"), media_type="text/csv; charset=utf-8",
         headers={"Content-Disposition": 'attachment; filename="yuksek_riskli_musteriler.csv"'},
+    )
+
+
+NO_ACTION = "Şimdilik müdahale gerekmiyor; izlemeye devam edin."
+PLAN_RISKS = Literal["high_mid", "high"]
+
+
+class ScenarioIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    contract: Literal["Month-to-month", "One year", "Two year"]
+    tenure: StrictInt = Field(ge=0, le=72)
+    monthly_charges: float = Field(ge=18, le=120, allow_inf_nan=False)
+    internet_service: Literal["DSL", "Fiber optic", "No"]
+    tech_support: StrictBool
+    online_security: StrictBool
+    payment_method: Literal["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"]
+    senior_citizen: StrictBool
+
+
+def _predict(body: ScenarioIn) -> dict:
+    metrics = load_json("metrics.json")
+    row = build_row(body.model_dump())
+    prob = float(load_model().predict_proba(row)[0, 1])
+    drivers = explain(row)
+    risk = risk_level(prob)
+
+    top_pos = next((d for d in drivers if d["contribution"] > 0), None)
+    if risk == "low" or top_pos is None:
+        action = NO_ACTION
+    else:
+        action = REASON_SOLUTIONS.get(top_pos["feature"], DEFAULT_SOLUTION)
+
+    df = load_customers()
+    similar = int(((df["Contract"] == body.contract) & (df["risk"] == risk)).sum())
+    best = metrics["best_model"]
+    return {
+        "probability": round(prob, 6),
+        "risk": risk,
+        "model": best,
+        "model_label": MODEL_LABELS.get(best, best),
+        "roc_auc": round(metrics["models"][best]["roc_auc"], 3),
+        "drivers": drivers,
+        "action": action,
+        "similar_count": similar,
+    }
+
+
+@app.post("/api/predict")
+def predict(body: ScenarioIn):
+    if ACTIVE is not DATASETS["telco"]:
+        raise HTTPException(status_code=409, detail="Senaryo tahmini yalnızca Telco veri setinde destekleniyor")
+    return _load(_predict, body)
+
+
+def _threshold(risk: str) -> float:
+    return MID_THRESHOLD if risk == "high_mid" else HIGH_THRESHOLD
+
+
+def _plan_groups(df: pd.DataFrame, risk: str) -> list[tuple[str, pd.DataFrame]]:
+    """Hedeflenen müşterileri önerilen aksiyona göre gruplar; en kalabalık plan önce."""
+    t = df[df["churn_probability"] >= _threshold(risk)]
+    groups = [(action, g.sort_values("churn_probability", ascending=False)) for action, g in t.groupby("suggested_action")]
+    return sorted(groups, key=lambda ag: len(ag[1]), reverse=True)
+
+
+def _plan_row(action: str, g: pd.DataFrame, targeted: int) -> dict:
+    count = len(g)
+    reason_feature = g["top_reason"].mode().iloc[0]
+    return {
+        "action": action,
+        "reason_feature": reason_feature,
+        "reason": label_for(reason_feature),
+        "count": count,
+        "high": int((g["risk"] == "high").sum()),
+        "mid": int((g["risk"] == "mid").sum()),
+        "share": round(count / targeted, 3),
+        "avg_probability": round(float(g["churn_probability"].mean()), 3),
+        "probabilities": [round(float(p), 3) for p in g["churn_probability"]],
+        "customers": [
+            {
+                "customer_id": r.customerID,
+                "probability": float(r.churn_probability),
+                "risk": r.risk,
+                "contract": _contract(r.Contract),
+                "reason": r.reason_label,
+            }
+            for r in g.head(5).itertuples()
+        ],
+    }
+
+
+def _plans_payload(risk: str) -> dict:
+    df = load_customers()
+    targeted_df = df[df["churn_probability"] >= _threshold(risk)]
+    targeted = len(targeted_df)
+    plans = [_plan_row(a, g, targeted) for a, g in _plan_groups(df, risk)]
+    return {
+        "summary": {
+            "targeted": targeted,
+            "plans": len(plans),
+            "avg_probability": round(float(targeted_df["churn_probability"].mean()), 3) if targeted else 0.0,
+        },
+        "plans": plans,
+        "insight": {
+            "top_action": plans[0]["action"] if plans else "",
+            "top_share": plans[0]["share"] if plans else 0.0,
+        },
+    }
+
+
+@app.get("/api/intervention-plans")
+def intervention_plans(risk: PLAN_RISKS = "high_mid"):
+    return _load(_plans_payload, risk)
+
+
+def _csv_safe(value):
+    """CSV injection: formül başlatan karakterleri metin olarak işaretler."""
+    return "'" + value if isinstance(value, str) and value[:1] in ("=", "+", "-", "@", "\t", "\r") else value
+
+
+def _export_group(action: str, risk: str) -> pd.DataFrame | None:
+    for a, g in _plan_groups(load_customers(), risk):
+        if a == action:  # tam eşleşme; dosya yolu ya da regex olarak kullanılmaz
+            return g
+    return None
+
+
+@app.get("/api/intervention-plans/export.csv")
+def export_intervention_plan(action: str, risk: PLAN_RISKS = "high_mid"):
+    g = _load(_export_group, action, risk)
+    if g is None:
+        raise HTTPException(status_code=404, detail="Plan bulunamadı")
+    out = pd.DataFrame({
+        "Müşteri ID": g["customerID"],
+        "Kayıp Olasılığı (%)": (g["churn_probability"] * 100).round(1),
+        "Risk": g["risk"].map({"high": "Yüksek", "mid": "Orta"}),
+        "Sözleşme": g["Contract"].map(CONTRACTS),
+        "Ana Neden": g["reason_label"],
+    })
+    for col in ("Müşteri ID", "Risk", "Sözleşme", "Ana Neden"):
+        out[col] = out[col].map(_csv_safe)
+    return Response(
+        out.to_csv(index=False).encode("utf-8-sig"), media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="mudahale_plani.csv"'},
     )

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yetkin360 — Kayıp Tahmini &amp; Müdahale Planları (prototip)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--canvas:#F6F3EC;--ink:#1A1A1A;--ink2:#555;--ink3:#8a857a;--forest:#1E3A28;--sage:#2E5A3D;--amber:#C77D2E;--brick:#BA3C2A;--line:#DCD6C8;--paper:#FBF9F4}
+*{box-sizing:border-box;margin:0}
+body{background:var(--canvas);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",system-ui,sans-serif;display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);padding:28px 22px;position:sticky;top:0;height:100vh}
+.brand{font:700 20px "Fraunces",serif;color:var(--forest);letter-spacing:-.01em}
+.brand small{display:block;font:500 11px "Plus Jakarta Sans";color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+nav{margin-top:40px;display:flex;flex-direction:column;gap:2px}
+nav a{color:var(--ink2);text-decoration:none;font-size:13px;font-weight:600;padding:7px 0 7px 14px;border-left:2px solid transparent}
+nav a.on{color:var(--forest);border-left-color:var(--forest)}
+nav a:hover{color:var(--forest)}
+main{padding:56px 72px 120px;max-width:1240px}
+.kicker{font:600 11px "Plus Jakarta Sans";letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+h1{font:300 64px/1 "Fraunces",serif;letter-spacing:-.03em;margin:14px 0 18px}
+h1 em{font-style:italic;font-weight:400;color:var(--forest)}
+.dek{max-width:620px;color:var(--ink2);font-size:16px}
+.proto{display:inline-block;margin-top:14px;font-size:11px;font-weight:600;color:var(--amber);border-bottom:1px dashed var(--amber)}
+hr.rule{border:0;border-top:1px solid var(--ink);margin:44px 0 0}
+section{display:none} section.on{display:block}
+
+/* ---------- Senaryo Laboratuvarı ---------- */
+.lab{display:grid;grid-template-columns:1.15fr .85fr;gap:72px;margin-top:40px;align-items:start}
+.sentence{font:300 34px/1.55 "Fraunces",serif;letter-spacing:-.01em}
+.slot{position:relative;display:inline-block;color:var(--forest);font-weight:500;border-bottom:2px solid var(--forest);cursor:pointer;padding:0 2px;transition:background .15s}
+.slot:hover,.slot:focus-visible{background:#1E3A2812;outline:none}
+.slot select,.slot input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:16px;width:100%}
+.slot.num input[type=range]{opacity:0}
+.hint{margin-top:22px;font-size:12px;color:var(--ink3)}
+.hint b{color:var(--ink2)}
+.readout{position:sticky;top:40px}
+.pct{font:300 168px/.85 "Fraunces",serif;letter-spacing:-.06em;transition:color .3s}
+.pct sup{font-size:.32em;vertical-align:top;margin-left:4px;letter-spacing:0}
+.verdict{font:400 italic 22px "Fraunces",serif;margin-top:10px}
+.spectrum{position:relative;height:46px;margin-top:34px}
+.spectrum .bar{position:absolute;left:0;right:0;top:18px;height:6px;background:linear-gradient(90deg,var(--sage) 0 40%,var(--amber) 40% 70%,var(--brick) 70%)}
+.spectrum .tick{position:absolute;top:30px;font-size:10px;color:var(--ink3);transform:translateX(-50%)}
+.spectrum .mark{position:absolute;top:6px;width:2px;height:30px;background:var(--ink);transition:left .45s cubic-bezier(.2,.8,.2,1)}
+.spectrum .mark:after{content:"";position:absolute;top:-6px;left:-5px;border:6px solid transparent;border-top-color:var(--ink)}
+h3{font:600 11px "Plus Jakarta Sans";letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:44px 0 14px}
+.tug{display:grid;grid-template-columns:1fr 1fr;font-size:13px}
+.tug .l,.tug .r{display:flex;align-items:center;gap:8px;padding:5px 0}
+.tug .l{justify-content:flex-end;padding-right:0}.tug .r{border-left:1px solid var(--ink)}
+.tug i{display:block;height:8px;transition:width .45s}
+.tug .l i{background:var(--sage)}.tug .r i{background:var(--brick)}
+.tug span{white-space:nowrap;color:var(--ink2)}
+.legend{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-top:8px}
+.action{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font:400 italic 21px/1.4 "Fraunces",serif}
+.action small{display:block;font:600 11px "Plus Jakarta Sans";font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.meta{margin-top:16px;font-size:11px;color:var(--ink3)}
+
+/* ---------- Kampanya Nehri ---------- */
+.lede{display:flex;gap:64px;margin-top:40px;align-items:baseline}
+.big{font:300 88px/.9 "Fraunces",serif;letter-spacing:-.04em}
+.big small{display:block;font:500 12px "Plus Jakarta Sans";letter-spacing:.06em;color:var(--ink3);margin-top:8px;text-transform:uppercase}
+.toggle{margin-left:auto;display:flex;gap:18px;font-size:13px;font-weight:600}
+.toggle button{background:none;border:0;font:inherit;color:var(--ink3);cursor:pointer;padding:4px 0;border-bottom:2px solid transparent}
+.toggle button.on{color:var(--forest);border-color:var(--forest)}
+.river{margin-top:48px;border-top:1px solid var(--ink)}
+.stream{border-bottom:1px solid var(--line);cursor:pointer}
+.stream:focus-visible{outline:2px solid var(--forest);outline-offset:-2px}
+.srow{display:grid;grid-template-columns:72px 1fr 260px;gap:28px;align-items:center;padding:22px 0}
+.rank{font:300 44px/1 "Fraunces",serif;color:var(--ink3)}
+.title{font:500 26px/1.2 "Fraunces",serif;letter-spacing:-.01em}
+.why{font-size:12px;color:var(--ink3);margin-top:4px}
+.why b{color:var(--ink2);font-weight:600}
+.band{height:var(--h);background:linear-gradient(90deg,var(--brick) 0 var(--hi),var(--amber) var(--hi) 100%);width:var(--w);min-width:6px;transition:height .3s}
+.nums{text-align:right;font-size:12px;color:var(--ink3)}
+.nums b{display:block;font:300 34px/1 "Fraunces",serif;color:var(--ink);letter-spacing:-.02em}
+.open .rank{color:var(--forest)}
+.strip{display:none;padding:6px 0 30px 100px}
+.open .strip{display:block}
+.dots{position:relative;height:120px;border-bottom:1px solid var(--ink)}
+.dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--brick);opacity:.55;transform:translate(-50%,50%)}
+.dot.mid{background:var(--amber)}
+.axisx{display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);margin-top:6px}
+.who{margin-top:22px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px}
+.who a{color:var(--forest);font-weight:600;font-family:ui-monospace,monospace;font-size:12px;text-decoration:none;border-bottom:1px solid #1E3A2840}
+.who .export{margin-left:auto;font-weight:600;color:var(--forest)}
+.note{margin-top:36px;max-width:640px;font:400 italic 17px/1.5 "Fraunces",serif;color:var(--ink2)}
+.note b{font-style:normal;font-weight:500;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:900px){body{grid-template-columns:1fr}aside{display:none}main{padding:32px 20px}.lab{grid-template-columns:1fr;gap:40px}h1{font-size:44px}.sentence{font-size:26px}.pct{font-size:120px}.srow{grid-template-columns:44px 1fr}.srow .nums{grid-column:2;text-align:left}.strip{padding-left:0}.lede{flex-wrap:wrap;gap:28px}}
+</style></head>
+<body>
+<aside>
+  <div class="brand">Yetkin360<small>Karar Destek</small></div>
+  <nav>
+    <a href="#">Genel Bakış</a><a href="#">Müşteri Riski</a><a href="#">Kayıp Analizi</a>
+    <a href="#tahmin" data-p="tahmin">Kayıp Tahmini</a><a href="#plan" data-p="plan">Müdahale Planları</a>
+    <a href="#">Model ve Raporlar</a>
+  </nav>
+</aside>
+<main>
+<section id="tahmin">
+  <div class="kicker">Kayıp Tahmini · Senaryo Laboratuvarı</div>
+  <h1>Bu müşteri <em>gider mi?</em></h1>
+  <p class="dek">Cümledeki altı çizili kelimeleri değiştirin; model her değişiklikte olasılığı yeniden hesaplar. Gerçek bir müşteriyi değil, bir senaryoyu sorguluyorsunuz.</p>
+  <span class="proto">Prototip: sayılar gösterim amaçlı yaklaşık bir formülden geliyor, gerçek model değil.</span>
+  <hr class="rule">
+  <div class="lab">
+    <div>
+      <p class="sentence">
+        Bu müşteri <span class="slot" tabindex="0"><b id="v-contract">aylık</b><select id="contract" aria-label="Sözleşme"><option value="m">aylık</option><option value="1">bir yıllık</option><option value="2">iki yıllık</option></select></span> sözleşmeli,
+        <span class="slot num" tabindex="0"><b id="v-tenure">14</b><input id="tenure" type="range" min="0" max="72" value="14" aria-label="Süre (ay)"></span> aydır bizimle
+        ve her ay <span class="slot num" tabindex="0">₺<b id="v-fee">89</b><input id="fee" type="range" min="18" max="120" value="89" aria-label="Aylık ücret"></span> ödüyor.
+        İnternete <span class="slot" tabindex="0"><b id="v-net">fiber</b><select id="net" aria-label="İnternet"><option value="f">fiber</option><option value="d">DSL</option><option value="n">hiç</option></select></span> ile bağlanıyor,
+        teknik desteği <span class="slot" tabindex="0"><b id="v-ts">yok</b><select id="ts" aria-label="Teknik destek"><option value="0">yok</option><option value="1">var</option></select></span>,
+        faturasını <span class="slot" tabindex="0"><b id="v-pay">elektronik çekle</b><select id="pay" aria-label="Ödeme"><option value="e">elektronik çekle</option><option value="p">posta çekiyle</option><option value="a">otomatik ödemeyle</option></select></span> ödüyor
+        ve <span class="slot" tabindex="0"><b id="v-sen">65 yaşın altında</b><select id="sen" aria-label="Yaş"><option value="0">65 yaşın altında</option><option value="1">65 yaşın üstünde</option></select></span>.
+      </p>
+      <p class="hint"><b>İpucu:</b> Kaydırıcılar için kelimeye tıklayıp ok tuşlarını kullanabilirsiniz.</p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <div class="pct" id="pct">72<sup>%</sup></div>
+      <div class="verdict" id="verdict">Yüksek risk: büyük olasılıkla ayrılacak.</div>
+      <div class="spectrum"><div class="bar"></div><div class="mark" id="mark"></div>
+        <span class="tick" style="left:0;transform:none">düşük</span><span class="tick" style="left:40%">0,40</span><span class="tick" style="left:70%">0,70</span><span class="tick" style="right:0;left:auto;transform:none">yüksek</span></div>
+      <h3>Olasılığı ne çekiyor?</h3>
+      <div class="tug" id="tug"></div>
+      <div class="legend"><span>← azaltıyor</span><span>artırıyor →</span></div>
+      <div class="action"><small>İlk hamle</small><span id="act">Uzun dönem sözleşmeye geçişte indirim</span></div>
+      <div class="meta">Model: XGBoost · ROC-AUC 0,847 · Telco veri seti</div>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="kicker">Müdahale Planları · Kampanya Nehri</div>
+  <h1>Kime, <em>hangi hamleyle?</em></h1>
+  <p class="dek">Riskli müşteriler, modelin onlar için önerdiği ilk hamleye göre akıyor. Bandın kalınlığı müşteri sayısı, kırmızı kısmı yüksek riskli payı.</p>
+  <hr class="rule">
+  <div class="lede">
+    <div class="big" id="b-n">0<small>hedeflenen müşteri</small></div>
+    <div class="big" id="b-p">0<small>plan</small></div>
+    <div class="big" id="b-avg">0<small>ortalama olasılık</small></div>
+    <div class="toggle" role="group" aria-label="Risk filtresi"><button data-f="hm" class="on">Yüksek + orta</button><button data-f="h">Yalnızca yüksek</button></div>
+  </div>
+  <div class="river" id="river"></div>
+  <p class="note" id="note"></p>
+</section>
+</main>
+<script>
+const PLANS = [{"action": "Uzun dönem sözleşmeye geçişte indirim", "reason": "Contract_Month-to-month", "n": 560, "high": 283, "avg": 0.681, "probs": [0.934, 0.932, 0.929, 0.926, 0.924, 0.915, 0.913, 0.912, 0.912, 0.911, 0.907, 0.907, 0.906, 0.905, 0.905, 0.904, 0.901, 0.901, 0.9, 0.9, 0.9, 0.9, 0.9, 0.899, 0.899, 0.898, 0.898, 0.898, 0.898, 0.898, 0.898, 0.896, 0.893, 0.893, 0.892, 0.892, 0.892, 0.891, 0.891, 0.89, 0.889, 0.889, 0.888, 0.886, 0.886, 0.886, 0.884, 0.88, 0.879, 0.877, 0.876, 0.874, 0.873, 0.873, 0.872, 0.871, 0.871, 0.868, 0.866, 0.865, 0.864, 0.862, 0.861, 0.861, 0.861, 0.86, 0.858, 0.858, 0.858, 0.854, 0.853, 0.852, 0.85, 0.85, 0.85, 0.85, 0.849, 0.848, 0.848, 0.847, 0.847, 0.846, 0.846, 0.846, 0.846, 0.845, 0.845, 0.844, 0.843, 0.842, 0.842, 0.84, 0.839, 0.839, 0.836, 0.835, 0.831, 0.83, 0.83, 0.83, 0.829, 0.829, 0.829, 0.825, 0.825, 0.825, 0.824, 0.821, 0.821, 0.821, 0.821, 0.82, 0.819, 0.819, 0.818, 0.818, 0.818, 0.817, 0.817, 0.817, 0.816, 0.816, 0.815, 0.814, 0.814, 0.813, 0.813, 0.813, 0.812, 0.812, 0.811, 0.811, 0.811, 0.808, 0.807, 0.807, 0.806, 0.806, 0.805, 0.805, 0.802, 0.801, 0.801, 0.797, 0.794, 0.794, 0.792, 0.791, 0.79, 0.79, 0.789, 0.788, 0.788, 0.788, 0.788, 0.786, 0.785, 0.784, 0.783, 0.782, 0.782, 0.782, 0.781, 0.78, 0.779, 0.779, 0.779, 0.776, 0.776, 0.776, 0.774, 0.774, 0.773, 0.772, 0.772, 0.772, 0.771, 0.771, 0.77, 0.77, 0.769, 0.768, 0.767, 0.766, 0.766, 0.765, 0.765, 0.762, 0.761, 0.761, 0.761, 0.761, 0.76, 0.759, 0.759, 0.758, 0.758, 0.758, 0.758, 0.757, 0.756, 0.756, 0.755, 0.755, 0.753, 0.753, 0.752, 0.752, 0.752, 0.751, 0.751, 0.751, 0.751, 0.749, 0.749, 0.747, 0.747, 0.746, 0.745, 0.745, 0.744, 0.743, 0.743, 0.741, 0.74, 0.739, 0.739, 0.738, 0.738, 0.736, 0.735, 0.735, 0.735, 0.735, 0.734, 0.734, 0.733, 0.732, 0.732, 0.732, 0.731, 0.731, 0.73, 0.73, 0.729, 0.729, 0.727, 0.727, 0.727, 0.725, 0.724, 0.724, 0.723, 0.723, 0.722, 0.722, 0.721, 0.72, 0.718, 0.717, 0.717, 0.715, 0.715, 0.713, 0.712, 0.71, 0.71, 0.708, 0.708, 0.707, 0.706, 0.705, 0.705, 0.704, 0.704, 0.703, 0.703, 0.703, 0.703, 0.702, 0.702, 0.701, 0.7, 0.7, 0.698, 0.698, 0.695, 0.695, 0.695, 0.695, 0.693, 0.691, 0.69, 0.689, 0.689, 0.686, 0.685, 0.685, 0.684, 0.684, 0.684, 0.684, 0.683, 0.683, 0.683, 0.683, 0.683, 0.681, 0.68, 0.678, 0.677, 0.677, 0.677, 0.675, 0.672, 0.672, 0.67, 0.67, 0.669, 0.664, 0.663, 0.663, 0.66, 0.66, 0.659, 0.659, 0.658, 0.657, 0.655, 0.655, 0.654, 0.648, 0.648, 0.648, 0.645, 0.645, 0.644, 0.644, 0.643, 0.642, 0.64, 0.64, 0.64, 0.638, 0.638, 0.637, 0.633, 0.632, 0.632, 0.632, 0.631, 0.63, 0.629, 0.629, 0.628, 0.627, 0.626, 0.624, 0.623, 0.623, 0.621, 0.621, 0.621, 0.618, 0.616, 0.616, 0.615, 0.615, 0.615, 0.615, 0.614, 0.612, 0.612, 0.611, 0.61, 0.61, 0.607, 0.607, 0.605, 0.602, 0.601, 0.601, 0.6, 0.598, 0.596, 0.596, 0.595, 0.595, 0.595, 0.594, 0.594, 0.593, 0.593, 0.593, 0.591, 0.589, 0.589, 0.588, 0.587, 0.587, 0.583, 0.578, 0.576, 0.575, 0.575, 0.575, 0.574, 0.573, 0.572, 0.571, 0.571, 0.57, 0.57, 0.57, 0.569, 0.568, 0.567, 0.566, 0.565, 0.565, 0.564, 0.562, 0.562, 0.557, 0.556, 0.556, 0.554, 0.554, 0.553, 0.552, 0.552, 0.551, 0.55, 0.548, 0.548, 0.546, 0.546, 0.545, 0.544, 0.543, 0.541, 0.541, 0.541, 0.54, 0.536, 0.536, 0.536, 0.535, 0.535, 0.534, 0.533, 0.531, 0.53, 0.53, 0.529, 0.527, 0.526, 0.521, 0.521, 0.516, 0.516, 0.512, 0.512, 0.51, 0.509, 0.508, 0.507, 0.505, 0.504, 0.501, 0.501, 0.5, 0.499, 0.497, 0.495, 0.494, 0.494, 0.494, 0.494, 0.492, 0.488, 0.487, 0.486, 0.485, 0.484, 0.483, 0.483, 0.482, 0.481, 0.48, 0.479, 0.477, 0.476, 0.475, 0.474, 0.473, 0.47, 0.469, 0.468, 0.468, 0.468, 0.468, 0.465, 0.465, 0.465, 0.463, 0.463, 0.459, 0.457, 0.456, 0.453, 0.453, 0.452, 0.447, 0.447, 0.446, 0.446, 0.446, 0.443, 0.442, 0.441, 0.44, 0.439, 0.438, 0.438, 0.436, 0.435, 0.434, 0.433, 0.433, 0.432, 0.432, 0.431, 0.431, 0.43, 0.426, 0.425, 0.424, 0.423, 0.422, 0.422, 0.421, 0.42, 0.42, 0.419, 0.419, 0.416, 0.416, 0.415, 0.413, 0.412, 0.412, 0.409, 0.408, 0.407, 0.407, 0.407, 0.404, 0.402, 0.401], "ids": ["5178-LMXOP", "0295-PPHDO", "1069-XAIEM", "9248-OJYKK", "2609-IAICY", "4415-IJZTP", "2514-GINMM", "0970-ETWGE"]}, {"action": "İlk aylara özel karşılama / bağlılık programı", "reason": "tenure", "n": 108, "high": 45, "avg": 0.673, "probs": [0.915, 0.913, 0.908, 0.906, 0.898, 0.898, 0.895, 0.894, 0.889, 0.887, 0.887, 0.882, 0.881, 0.856, 0.852, 0.839, 0.826, 0.825, 0.821, 0.815, 0.802, 0.8, 0.79, 0.79, 0.787, 0.781, 0.78, 0.779, 0.779, 0.775, 0.775, 0.773, 0.771, 0.768, 0.744, 0.739, 0.735, 0.734, 0.731, 0.73, 0.726, 0.716, 0.712, 0.705, 0.701, 0.7, 0.683, 0.68, 0.678, 0.677, 0.667, 0.659, 0.655, 0.651, 0.645, 0.637, 0.634, 0.629, 0.627, 0.626, 0.626, 0.623, 0.623, 0.606, 0.604, 0.602, 0.6, 0.596, 0.596, 0.592, 0.591, 0.59, 0.589, 0.584, 0.582, 0.581, 0.58, 0.58, 0.579, 0.578, 0.573, 0.573, 0.571, 0.571, 0.569, 0.569, 0.568, 0.568, 0.568, 0.559, 0.557, 0.556, 0.549, 0.534, 0.53, 0.519, 0.509, 0.503, 0.501, 0.493, 0.475, 0.467, 0.462, 0.443, 0.431, 0.423, 0.422, 0.409], "ids": ["5167-ZFFMM", "6230-BSUXY", "1628-BIZYP", "2254-DLXRI", "9507-EXLTT", "8821-XNHVZ", "6857-VWJDT", "3707-GNWHM"]}, {"action": "Kullanıma uygun daha düşük paket önerisi", "reason": "MonthlyCharges", "n": 1, "high": 0, "avg": 0.674, "probs": [0.674], "ids": ["4329-YPDDQ"]}];
+const REASONS = {"Contract_Month-to-month":"Sözleşme: aylık","tenure":"Müşteri olma süresi","MonthlyCharges":"Aylık ücret"};
+const $ = s => document.querySelector(s);
+const fmt = (x,d=1) => x.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* sayfa geçişi */
+function show(p){document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===p));
+  document.querySelectorAll("nav a[data-p]").forEach(a=>a.classList.toggle("on",a.dataset.p===p));}
+document.querySelectorAll("nav a[data-p]").forEach(a=>a.onclick=e=>{e.preventDefault();show(a.dataset.p);history.replaceState(null,"","#"+a.dataset.p)});
+show(location.hash==="#plan"?"plan":"tahmin");
+
+/* ---- senaryo: prototip skoru (gerçek model değil) ---- */
+function score(){
+  const c=$("#contract").value,t=+$("#tenure").value,f=+$("#fee").value,n=$("#net").value,ts=$("#ts").value,p=$("#pay").value,s=$("#sen").value;
+  const parts=[
+    ["Sözleşme: "+({m:"aylık",1:"1 yıllık",2:"2 yıllık"})[c], c==="m"?1.1:c==="1"?-0.6:-1.4],
+    ["Müşteri olma süresi", 0.9-t/26],
+    ["Aylık ücret", (f-65)/45],
+    ["İnternet: "+({f:"fiber",d:"DSL",n:"yok"})[n], n==="f"?0.55:n==="d"?-0.1:-0.7],
+    ["Teknik destek "+(ts==="1"?"var":"yok"), ts==="1"?-0.45:0.35],
+    ["Ödeme: "+({e:"elektronik çek",p:"posta çeki",a:"otomatik"})[p], p==="e"?0.5:p==="p"?-0.1:-0.35],
+    ["65 yaş üstü", s==="1"?0.3:-0.05],
+  ];
+  const z=-1.9+parts.reduce((a,x)=>a+x[1],0), prob=1/(1+Math.exp(-z));
+  return {prob,parts};
+}
+function render(){
+  const lbl={contract:{m:"aylık",1:"bir yıllık",2:"iki yıllık"},net:{f:"fiber",d:"DSL",n:"hiç"},ts:{0:"yok",1:"var"},pay:{e:"elektronik çekle",p:"posta çekiyle",a:"otomatik ödemeyle"},sen:{0:"65 yaşın altında",1:"65 yaşın üstünde"}};
+  for(const k in lbl) $("#v-"+k).textContent=lbl[k][$("#"+k).value];
+  $("#v-tenure").textContent=$("#tenure").value; $("#v-fee").textContent=$("#fee").value;
+  const {prob,parts}=score(), pc=Math.round(prob*100);
+  const col=prob>=.7?"var(--brick)":prob>=.4?"var(--amber)":"var(--sage)";
+  $("#pct").innerHTML=pc+"<sup>%</sup>"; $("#pct").style.color=col;
+  $("#verdict").textContent=prob>=.7?"Yüksek risk: büyük olasılıkla ayrılacak.":prob>=.4?"Orta risk: kararsız bölgede.":"Düşük risk: büyük olasılıkla kalacak.";
+  $("#mark").style.left=(prob*100)+"%";
+  const max=Math.max(...parts.map(p=>Math.abs(p[1])));
+  $("#tug").innerHTML=parts.sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,5).map(([n,v])=>{
+    const w=(Math.abs(v)/max*100).toFixed(0)+"%";
+    return v<0?`<div class="l"><span>${n}</span><i style="width:${w}"></i></div><div class="r"></div>`:`<div class="l"></div><div class="r"><i style="width:${w}"></i><span>${n}</span></div>`}).join("");
+  const top=parts.filter(p=>p[1]>0)[0];
+  $("#act").textContent=!top||prob<.4?"Şimdilik müdahale gerekmiyor; izlemeye devam.":top[0].startsWith("Sözleşme")?"Uzun dönem sözleşmeye geçişte indirim":top[0].startsWith("Müşteri olma")?"İlk aylara özel karşılama / bağlılık programı":top[0].startsWith("Aylık")?"Kullanıma uygun daha düşük paket önerisi":top[0].startsWith("Teknik")?"Belirli süre ücretsiz teknik destek":top[0].startsWith("Ödeme")?"Otomatik ödemeye geçişte avantaj":"Fiber hizmet kalitesi/fiyat gözden geçirme kampanyası";
+}
+document.querySelectorAll(".slot select,.slot input").forEach(el=>el.addEventListener("input",render));
+render();
+
+/* ---- kampanya nehri ---- */
+let filter="hm";
+function river(){
+  const plans=PLANS.map(p=>{const pr=filter==="h"?p.probs.filter(x=>x>=.7):p.probs;return {...p,pr,n:pr.length,high:pr.filter(x=>x>=.7).length,avg:pr.length?pr.reduce((a,b)=>a+b,0)/pr.length:0}}).filter(p=>p.n);
+  const N=plans.reduce((a,p)=>a+p.n,0), mx=Math.max(...plans.map(p=>p.n));
+  $("#b-n").firstChild.nodeValue=N.toLocaleString("tr-TR");
+  $("#b-p").firstChild.nodeValue=plans.length;
+  $("#b-avg").firstChild.nodeValue="%"+fmt(plans.reduce((a,p)=>a+p.avg*p.n,0)/N*100);
+  $("#river").innerHTML=plans.map((p,i)=>`
+   <div class="stream${i===0?" open":""}" tabindex="0" role="button" aria-expanded="${i===0}">
+    <div class="srow"><div class="rank">${String(i+1).padStart(2,"0")}</div>
+     <div><div class="title">${p.action}</div><div class="why">Tetikleyen neden: <b>${REASONS[p.reason]||p.reason}</b></div>
+      <div class="band" style="--w:${Math.max(p.n/mx*100,1)}%;--h:${Math.max(6,Math.round(p.n/mx*44))}px;--hi:${(p.high/p.n*100).toFixed(0)}%;margin-top:14px"></div></div>
+     <div class="nums"><b>${p.n.toLocaleString("tr-TR")}</b>müşteri · %${fmt(p.avg*100)} ort. · ${p.high} yüksek</div></div>
+    <div class="strip"><div class="dots">${p.pr.map((x,j)=>`<span class="dot${x<.7?" mid":""}" style="left:${((x-.4)/.6*100).toFixed(1)}%;bottom:${(j*37%100)}%"></span>`).join("")}</div>
+     <div class="axisx"><span>0,40</span><span>0,55</span><span>0,70</span><span>0,85</span><span>1,00</span></div>
+     <div class="who">${p.ids.slice(0,6).map(id=>`<a href="#">${id}</a>`).join("")}<span style="color:var(--ink3)">… ve ${Math.max(p.n-6,0)} müşteri daha</span><a class="export" href="#">CSV olarak indir ↓</a></div></div>
+   </div>`).join("");
+  document.querySelectorAll(".stream").forEach(s=>{const t=()=>{s.classList.toggle("open");s.setAttribute("aria-expanded",s.classList.contains("open"))};s.onclick=e=>{if(e.target.closest(".strip"))return;t()};s.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t()}}});
+  const top=plans[0];
+  $("#note").innerHTML=`Riskli müşterilerin <b>%${fmt(top.n/N*100,0)}</b>'i tek bir hamleye düşüyor: <b>${top.action.toLowerCase()}</b>. Model riski büyük ölçüde sözleşme tipine bağlıyor; kampanyaları çeşitlendirmek için müşteri bazlı ikinci neden de gösterilebilir. Aksiyonların uygulanıp uygulanmadığı bu sistemde tutulmuyor.`;
+}
+document.querySelectorAll(".toggle button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll(".toggle button").forEach(x=>x.classList.toggle("on",x===b));river()});
+river();
+</script>
+</body></html>
